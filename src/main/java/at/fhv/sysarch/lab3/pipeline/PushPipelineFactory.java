@@ -2,7 +2,9 @@ package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.push.filter.Coloring;
 import at.fhv.sysarch.lab3.pipeline.push.filter.ModelViewTransformation;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.ColoringPipe;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.ModelViewTransformationPipe;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.PipeImpl;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.SinkPipe;
@@ -36,11 +38,16 @@ public class PushPipelineFactory {
         // TODO 6. perform perspective division to screen coordinates
 
         // TODO 7. feed into the sink (renderer)
+
         ModelSink sink = new ModelSink(pd, pd.getGraphicsContext());
 
         SinkPipe sinkPipe = new SinkPipe(sink);
 
-        ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd, sinkPipe);
+        Coloring coloring = new Coloring(pd, sinkPipe);
+
+        ColoringPipe coloringPipe = new ColoringPipe(coloring);
+
+        ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd, coloringPipe);
 
         ModelViewTransformationPipe modelCoordinatePipe = new ModelViewTransformationPipe(modelViewTransformation);
 

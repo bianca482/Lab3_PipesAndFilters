@@ -7,9 +7,9 @@ public class SinkPipe implements Pipe<Face> {
 
     private ModelSink modelSink;
 
-   public SinkPipe(ModelSink modelSink){
-       this.modelSink = modelSink;
-   }
+    public SinkPipe(ModelSink modelSink) {
+        this.modelSink = modelSink;
+    }
 
     @Override
     public void write(Face value) {

@@ -3,7 +3,7 @@ package at.fhv.sysarch.lab3.pipeline.push.pipe;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.push.filter.Filter;
 
-public class ColoringPipe implements Pipe<Face>{
+public class ColoringPipe implements Pipe<Face> {
 
     private Filter<Face> successor;
 
@@ -13,6 +13,6 @@ public class ColoringPipe implements Pipe<Face>{
 
     @Override
     public void write(Face value) {
-
+        successor.write(value);
     }
 }

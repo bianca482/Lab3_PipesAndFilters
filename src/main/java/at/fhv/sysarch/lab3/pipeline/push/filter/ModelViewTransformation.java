@@ -31,7 +31,7 @@ public class ModelViewTransformation implements Filter<Face> {
         Vec4 v2Trans = modelTransform.multiply(face.getV2());
         Vec4 v3Trans = modelTransform.multiply(face.getV3());
 
-        Face face1 = new Face(v1Trans, v2Trans, v3Trans, v1Trans, v1Trans, v1Trans);
-        succesor.write(face1);
+        face = new Face(v1Trans, v2Trans, v3Trans, v1Trans, v1Trans, v1Trans);
+        succesor.write(face);
     }
 }

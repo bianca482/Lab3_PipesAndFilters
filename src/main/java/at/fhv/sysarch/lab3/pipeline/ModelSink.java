@@ -3,6 +3,7 @@ package at.fhv.sysarch.lab3.pipeline;
 import at.fhv.sysarch.lab3.obj.Face;
 import com.hackoeur.jglm.Vec4;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class ModelSink {
 
@@ -19,6 +20,13 @@ public class ModelSink {
         Vec4 v1Trans = face.getV1();
         Vec4 v2Trans = face.getV2();
         Vec4 v3Trans = face.getV3();
+
+        //nicht sicher aber wir dürfen keine neue Klasse erstellen? 4te Dimension (getW) der Vektoren, um die rgb Farben zu speichern.
+        float r = face.getV1().getW();
+        float g = face.getV2().getW();
+        float b = face.getV3().getW();
+        Color color = new Color(r, g, b, 1.0);
+        context.setStroke(color);
 
         //Projection -> Größe anpassen
         float scaleFactor = 4;

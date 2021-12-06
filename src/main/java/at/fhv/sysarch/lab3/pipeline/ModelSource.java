@@ -14,5 +14,4 @@ public class ModelSource {
             this.successor.write(face);
         }
     }
-
 }
