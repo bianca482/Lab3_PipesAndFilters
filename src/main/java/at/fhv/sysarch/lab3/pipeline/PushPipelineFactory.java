@@ -2,7 +2,10 @@ package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.push.filter.ModelViewTransformation;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.ModelViewTransformationPipe;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.PipeImpl;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.SinkPipe;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Matrices;
 import javafx.animation.AnimationTimer;
@@ -24,7 +27,7 @@ public class PushPipelineFactory {
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. TODO perform lighting in VIEW SPACE
-            
+
             // 5. TODO perform projection transformation on VIEW SPACE coordinates
         } else {
             // 5. TODO perform projection transformation
@@ -40,11 +43,19 @@ public class PushPipelineFactory {
 
         source.successor = connector;
 
+        SinkPipe sinkPipe = new SinkPipe(sink);
+
+        ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd, sinkPipe);
+
+        ModelViewTransformationPipe modelCoordinatePipe = new ModelViewTransformationPipe(modelViewTransformation);
+
+        source.successor = modelCoordinatePipe;
+
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
         return new AnimationRenderer(pd) {
             // TODO rotation variable goes in here
-            private float rotation = 0.1f;
+            private float rotationRadiantPerSecond = 1f;
 
             /** This method is called for every frame from the JavaFX Animation
              * system (using an AnimationTimer, see AnimationRenderer). 
@@ -53,9 +64,9 @@ public class PushPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
-                // TODO compute rotation in radians (abhängig von fraction)
-                rotation += 0.1;
-                sink.rotation = rotation;
+                // TODO compute rotation in radians (abhängig von fraction) -erledigt
+                float rotationRadiant = modelViewTransformation.rotation + rotationRadiantPerSecond * fraction;
+                modelViewTransformation.rotation = rotationRadiant;
 
                 // TODO create new model rotation matrix using pd.modelRotAxis
                 Mat4 rotation = Matrices.rotate(0.4f, pd.getModelRotAxis());
