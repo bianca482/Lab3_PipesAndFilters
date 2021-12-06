@@ -19,7 +19,7 @@ public class ModelSink {
 
     public void write(Face face) {
         //Input für Filter 1
-        Mat4 rotation = Matrices.rotate(0.4f, pd.getModelRotAxis());
+        Mat4 rotation = Matrices.rotate(this.rotation, pd.getModelRotAxis());
 
         Mat4 translation = pd.getModelTranslation().multiply(rotation);
         Mat4 modelTransform = pd.getViewportTransform().multiply(translation);
