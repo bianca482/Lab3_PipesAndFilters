@@ -2,11 +2,16 @@ package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.PipeImpl;
+import com.hackoeur.jglm.Mat4;
+import com.hackoeur.jglm.Matrices;
 import javafx.animation.AnimationTimer;
+import javafx.scene.paint.Color;
 
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // TODO: push from the source (model)
+        ModelSource source = new ModelSource();
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
 
@@ -28,11 +33,18 @@ public class PushPipelineFactory {
         // TODO 6. perform perspective division to screen coordinates
 
         // TODO 7. feed into the sink (renderer)
+        ModelSink sink = new ModelSink(pd, pd.getGraphicsContext());
+
+        PipeImpl connector = new PipeImpl();
+        connector.successor = sink;
+
+        source.successor = connector;
 
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
         return new AnimationRenderer(pd) {
             // TODO rotation variable goes in here
+            private float rotation = 0.1f;
 
             /** This method is called for every frame from the JavaFX Animation
              * system (using an AnimationTimer, see AnimationRenderer). 
@@ -41,15 +53,22 @@ public class PushPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
-                // TODO compute rotation in radians
+                // TODO compute rotation in radians (abhängig von fraction)
+                rotation += 0.1;
+                sink.rotation = rotation;
 
                 // TODO create new model rotation matrix using pd.modelRotAxis
+                Mat4 rotation = Matrices.rotate(0.4f, pd.getModelRotAxis());
 
                 // TODO compute updated model-view tranformation
+                Mat4 translation = pd.getModelTranslation().multiply(rotation);
+                Mat4 modelTransform = pd.getViewportTransform().multiply(translation);
 
                 // TODO update model-view filter
 
                 // TODO trigger rendering of the pipeline
+                pd.getGraphicsContext().setStroke(Color.RED);
+                source.write(model.getFaces());
             }
         };
     }
