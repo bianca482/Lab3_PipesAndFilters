@@ -38,17 +38,13 @@ public class PushPipelineFactory {
         // TODO 7. feed into the sink (renderer)
         ModelSink sink = new ModelSink(pd, pd.getGraphicsContext());
 
-        PipeImpl connector = new PipeImpl();
-        connector.successor = sink;
-
-        source.successor = connector;
-
         SinkPipe sinkPipe = new SinkPipe(sink);
 
         ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd, sinkPipe);
 
         ModelViewTransformationPipe modelCoordinatePipe = new ModelViewTransformationPipe(modelViewTransformation);
 
+        // Connector
         source.successor = modelCoordinatePipe;
 
         // returning an animation renderer which handles clearing of the
