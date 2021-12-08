@@ -5,7 +5,7 @@ import at.fhv.sysarch.lab3.pipeline.ModelSink;
 
 public class SinkPipe implements Pipe<Face> {
 
-    private ModelSink modelSink;
+    private final ModelSink modelSink;
 
     public SinkPipe(ModelSink modelSink) {
         this.modelSink = modelSink;

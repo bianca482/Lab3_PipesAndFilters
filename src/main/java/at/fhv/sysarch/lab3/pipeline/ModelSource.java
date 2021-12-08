@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ModelSource {
 
-    public Pipe<Face> successor; //Generalisieren, Interface verwenden; ModelSource hat Nachfolger
+    public Pipe<Face> successor;
 
     public void write(List<Face> faces) {
         for (Face face : faces) {

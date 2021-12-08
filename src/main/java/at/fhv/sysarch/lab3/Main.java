@@ -22,8 +22,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 //    private final static int VIEW_WIDTH  = 860;
 //    private final static int VIEW_HEIGHT = 540;
-    private final static int VIEW_WIDTH  = 430;
-    private final static int VIEW_HEIGHT = 260;
+    private final static int VIEW_WIDTH  = 700;
+    private final static int VIEW_HEIGHT = 400;
 
     private final static int SCENE_WIDTH  = VIEW_WIDTH * 2;
     private final static int SCENE_HEIGHT = VIEW_HEIGHT * 2;

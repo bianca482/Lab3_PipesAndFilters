@@ -8,12 +8,12 @@ import javafx.scene.paint.Color;
 
 public class Coloring implements Filter<Face> {
 
-    private PipelineData pd;
-    private Pipe<Face> succesor;
+    private final PipelineData pd;
+    private final Pipe<Face> successor;
 
     public Coloring(PipelineData pd, Pipe<Face> successor) {
         this.pd = pd;
-        this.succesor = successor;
+        this.successor = successor;
     }
 
     @Override
@@ -29,6 +29,6 @@ public class Coloring implements Filter<Face> {
         Vec4 v2Color = new Vec4(input.getV2().getX(), input.getV2().getY(), input.getV2().getZ(), g);
         Vec4 v3Color = new Vec4(input.getV3().getX(), input.getV3().getY(), input.getV3().getZ(), b);
 
-        succesor.write(new Face(v1Color, v2Color, v3Color, input));
+        successor.write(new Face(v1Color, v2Color, v3Color, input));
     }
 }

@@ -1,17 +1,17 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
+import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
 import at.fhv.sysarch.lab3.pipeline.push.filter.Coloring;
 import at.fhv.sysarch.lab3.pipeline.push.filter.ModelViewTransformation;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.ColoringPipe;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.ModelViewTransformationPipe;
-import at.fhv.sysarch.lab3.pipeline.push.pipe.PipeImpl;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.Pipe;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.SinkPipe;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Matrices;
 import javafx.animation.AnimationTimer;
-import javafx.scene.paint.Color;
 
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
@@ -39,17 +39,14 @@ public class PushPipelineFactory {
 
         // TODO 7. feed into the sink (renderer)
 
-        ModelSink sink = new ModelSink(pd, pd.getGraphicsContext());
-
-        SinkPipe sinkPipe = new SinkPipe(sink);
+        ModelSink sink = new ModelSink(pd.getGraphicsContext());
+        Pipe<Face> sinkPipe = new SinkPipe(sink);
 
         Coloring coloring = new Coloring(pd, sinkPipe);
-
-        ColoringPipe coloringPipe = new ColoringPipe(coloring);
+        Pipe<Face> coloringPipe = new ColoringPipe(coloring);
 
         ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd, coloringPipe);
-
-        ModelViewTransformationPipe modelCoordinatePipe = new ModelViewTransformationPipe(modelViewTransformation);
+        Pipe<Face> modelCoordinatePipe = new ModelViewTransformationPipe(modelViewTransformation);
 
         // Connector
         source.successor = modelCoordinatePipe;
@@ -72,16 +69,15 @@ public class PushPipelineFactory {
                 modelViewTransformation.rotation = rotationRadiant;
 
                 // TODO create new model rotation matrix using pd.modelRotAxis
-                Mat4 rotation = Matrices.rotate(0.4f, pd.getModelRotAxis());
+                Mat4 rotation = Matrices.rotate(0.4f, pd.getModelRotAxis()); //Hier den rotationRadiant verwenden?
 
-                // TODO compute updated model-view tranformation
+                // TODO compute updated model-view transformation
                 Mat4 translation = pd.getModelTranslation().multiply(rotation);
                 Mat4 modelTransform = pd.getViewportTransform().multiply(translation);
 
                 // TODO update model-view filter
 
                 // TODO trigger rendering of the pipeline
-                pd.getGraphicsContext().setStroke(Color.RED);
                 source.write(model.getFaces());
             }
         };

@@ -5,7 +5,7 @@ import at.fhv.sysarch.lab3.pipeline.push.filter.Filter;
 
 public class ColoringPipe implements Pipe<Face> {
 
-    private Filter<Face> successor;
+    private final Filter<Face> successor;
 
     public ColoringPipe(Filter<Face> successor) {
         this.successor = successor;
