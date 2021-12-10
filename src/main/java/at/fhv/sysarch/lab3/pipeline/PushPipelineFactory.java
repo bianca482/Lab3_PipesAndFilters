@@ -19,6 +19,8 @@ public class PushPipelineFactory {
         Pipe<Face> modelPipe = new GenericPipe<>(modelViewTransformation);
 
         // TODO 2. perform backface culling in VIEW SPACE
+        BackfaceCulling backfaceCulling = new BackfaceCulling();
+        Pipe<Face> cullingPipe = new GenericPipe<>(backfaceCulling);
 
         // TODO 3. perform depth sorting in VIEW SPACE
 
@@ -43,11 +45,12 @@ public class PushPipelineFactory {
         Pipe<Face> screenSpacePipe = new GenericPipe<>(screenSpaceTransform);
 
         // Feed into the sink (renderer)
-        Filter<Pair<Face, Color>> sink = new ModelSink(pd.getGraphicsContext());
+        Filter<Pair<Face, Color>> sink = new ModelSink(pd, pd.getGraphicsContext());
         Pipe<Pair<Face, Color>> sinkPipe = new GenericPipe<>(sink);
 
         source.setSuccessor(modelPipe);
-        modelViewTransformation.setSuccessor(perspectivePipe);
+        modelViewTransformation.setSuccessor(cullingPipe);
+        backfaceCulling.setSuccessor(perspectivePipe);
         perspectiveProjection.setSuccessor(screenSpacePipe);
         screenSpaceTransform.setSuccessor(colorPipe);
         coloring.setSuccessor(sinkPipe);

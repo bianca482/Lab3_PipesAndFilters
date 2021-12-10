@@ -1,6 +1,7 @@
 package at.fhv.sysarch.lab3.pipeline.push.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import com.hackoeur.jglm.Vec4;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,9 +10,11 @@ import javafx.scene.paint.Color;
 public class ModelSink implements Filter<Pair<Face, Color>> {
 
     private final GraphicsContext context;
+    private PipelineData pd;
 
-    public ModelSink(GraphicsContext context) {
+    public ModelSink(PipelineData pd, GraphicsContext context) {
         this.context = context;
+        this.pd = pd;
     }
 
     @Override
