@@ -10,12 +10,11 @@ import com.hackoeur.jglm.Vec4;
 public class ModelViewTransformation implements Filter<Face> {
 
     private final PipelineData pd;
-    private final Pipe<Face> successor;
-    public float rotation;
+    private Pipe<Face> successor;
+    private float rotation;
 
-    public ModelViewTransformation(PipelineData pd, Pipe<Face> successor) {
+    public ModelViewTransformation(PipelineData pd) {
         this.pd = pd;
-        this.successor = successor;
     }
 
     @Override
@@ -24,16 +23,27 @@ public class ModelViewTransformation implements Filter<Face> {
         Mat4 rotation = Matrices.rotate(this.rotation, pd.getModelRotAxis());
 
         //Model-View Transformation
-        Mat4 translation = pd.getModelTranslation().multiply(rotation).translate(pd.getModelPos());
+        Mat4 translation = pd.getModelTranslation().multiply(rotation);
         Mat4 viewTransform = pd.getViewTransform().multiply(translation);
-        Mat4 modelTransform = pd.getViewportTransform().multiply(viewTransform);
 
-        Vec4 v1Trans = modelTransform.multiply(input.getV1());
-        Vec4 v2Trans = modelTransform.multiply(input.getV2());
-        Vec4 v3Trans = modelTransform.multiply(input.getV3());
+        Vec4 v1Trans = viewTransform.multiply(input.getV1());
+        Vec4 v2Trans = viewTransform.multiply(input.getV2());
+        Vec4 v3Trans = viewTransform.multiply(input.getV3());
 
-        input = new Face(v1Trans, v2Trans, v3Trans, v1Trans, v1Trans, v1Trans); //Wieso 4x v1Trans?
+        input = new Face(v1Trans, v2Trans, v3Trans, v1Trans, v1Trans, v1Trans);
 
         successor.write(input);
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setSuccessor(Pipe<Face> successor){
+        this.successor = successor;
     }
 }
