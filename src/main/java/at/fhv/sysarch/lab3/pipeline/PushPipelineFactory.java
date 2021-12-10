@@ -13,8 +13,6 @@ public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // Push from the source (model)
         ModelSource source = new ModelSource();
-        Filter<Pair<Face, Color>> sink = new ModelSink(pd.getGraphicsContext());
-        Pipe<Pair<Face, Color>> sinkPipe = new GenericPipe<>(sink);
 
         // Perform model-view transformation from model to VIEW SPACE coordinates
         ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd);
@@ -40,13 +38,13 @@ public class PushPipelineFactory {
         PerspectiveProjection perspectiveProjection = new PerspectiveProjection(pd);
         Pipe<Face> perspectivePipe = new GenericPipe<>(perspectiveProjection);
 
+        // TODO 6. perform perspective division to screen coordinates
         ScreenSpaceTransform screenSpaceTransform = new ScreenSpaceTransform(pd);
         Pipe<Face> screenSpacePipe = new GenericPipe<>(screenSpaceTransform);
 
-        // TODO 6. perform perspective division to screen coordinates
-
         // Feed into the sink (renderer)
-
+        Filter<Pair<Face, Color>> sink = new ModelSink(pd.getGraphicsContext());
+        Pipe<Pair<Face, Color>> sinkPipe = new GenericPipe<>(sink);
 
         source.setSuccessor(modelPipe);
         modelViewTransformation.setSuccessor(perspectivePipe);

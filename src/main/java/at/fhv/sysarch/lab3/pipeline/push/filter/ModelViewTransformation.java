@@ -30,7 +30,7 @@ public class ModelViewTransformation implements Filter<Face> {
         Vec4 v2Trans = viewTransform.multiply(input.getV2());
         Vec4 v3Trans = viewTransform.multiply(input.getV3());
 
-        input = new Face(v1Trans, v2Trans, v3Trans, v1Trans, v1Trans, v1Trans);
+        input = new Face(v1Trans, v2Trans, v3Trans, input.getN1(), input.getN2(), input.getN3());
 
         successor.write(input);
     }
