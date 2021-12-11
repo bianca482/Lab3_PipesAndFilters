@@ -3,9 +3,12 @@ package at.fhv.sysarch.lab3.pipeline.push.filter;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
+import at.fhv.sysarch.lab3.rendering.RenderingMode;
+import com.hackoeur.jglm.Vec2;
 import com.hackoeur.jglm.Vec4;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 
 public class ModelSink implements Filter<Pair<Face, Color>> {
 
@@ -22,6 +25,8 @@ public class ModelSink implements Filter<Pair<Face, Color>> {
         Vec4 v1Trans = faceColorPair.fst().getV1();
         Vec4 v2Trans = faceColorPair.fst().getV2();
         Vec4 v3Trans = faceColorPair.fst().getV3();
+
+        RenderingMode renderingMode = pd.getRenderingMode();
 
         context.setStroke(faceColorPair.snd());
 

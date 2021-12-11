@@ -19,7 +19,7 @@ public class PushPipelineFactory {
         Pipe<Face> modelPipe = new GenericPipe<>(modelViewTransformation);
 
         // TODO 2. perform backface culling in VIEW SPACE
-        BackfaceCulling backfaceCulling = new BackfaceCulling();
+        BackfaceCulling backfaceCulling = new BackfaceCulling(pd);
         Pipe<Face> cullingPipe = new GenericPipe<>(backfaceCulling);
 
         // TODO 3. perform depth sorting in VIEW SPACE
