@@ -18,15 +18,15 @@ public class PushPipelineFactory {
 
         // Perform model-view transformation from model to VIEW SPACE coordinates
         ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd);
-        Pipe<Face> modelPipe = new GenericPipe<>(modelViewTransformation);
+        Pipe<List<Face>> modelPipe = new GenericPipe<>(modelViewTransformation);
 
         // Backface culling in VIEW SPACE
         BackfaceCulling backfaceCulling = new BackfaceCulling(pd);
-        Pipe<Face> cullingPipe = new GenericPipe<>(backfaceCulling);
+        Pipe<List<Face>> cullingPipe = new GenericPipe<>(backfaceCulling);
 
         // TODO 3. perform depth sorting in VIEW SPACE
-        // DepthSorting depthSorting = new DepthSorting(pd);
-        // Pipe<List<Face>> sortingPipe = new GenericPipe<>(depthSorting);
+        DepthSorting depthSorting = new DepthSorting(pd);
+        Pipe<List<Face>> sortingPipe = new GenericPipe<>(depthSorting);
 
         // Add coloring (space unimportant)
         Coloring coloring = new Coloring(pd);
@@ -41,7 +41,7 @@ public class PushPipelineFactory {
             FlatShading flatShading = new FlatShading(pd);
             Pipe<Face> shadingPipe = new GenericPipe<>(flatShading);
 
-            backfaceCulling.setSuccessor(shadingPipe);
+            depthSorting.setSuccessor(shadingPipe);
 
             // 5. Perform projection transformation on VIEW SPACE coordinates
             perspectiveProjection = new PerspectiveProjection(pd);
@@ -53,7 +53,7 @@ public class PushPipelineFactory {
             perspectiveProjection = new PerspectiveProjection(pd);
             perspectivePipe = new GenericPipe<>(perspectiveProjection);
 
-            backfaceCulling.setSuccessor(perspectivePipe);
+            depthSorting.setSuccessor(perspectivePipe);
         }
 
         // Perform perspective division to screen coordinates
@@ -66,6 +66,7 @@ public class PushPipelineFactory {
 
         source.setSuccessor(modelPipe);
         modelViewTransformation.setSuccessor(cullingPipe);
+        backfaceCulling.setSuccessor(sortingPipe);
         perspectiveProjection.setSuccessor(screenSpacePipe);
         screenSpaceTransform.setSuccessor(colorPipe);
         coloring.setSuccessor(sinkPipe);

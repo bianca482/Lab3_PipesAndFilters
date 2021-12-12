@@ -7,16 +7,14 @@ import java.util.List;
 
 public class ModelSource implements Filter<List<Face>> {
 
-    private Pipe<Face> successor;
+    private Pipe<List<Face>> successor;
 
     @Override
     public void write(List<Face> faces) {
-        for (Face face : faces) {
-            this.successor.write(face);
-        }
+       this.successor.write(faces);
     }
 
-    public void setSuccessor(Pipe<Face> successor) {
+    public void setSuccessor(Pipe<List<Face>> successor) {
         this.successor = successor;
     }
 }

@@ -27,20 +27,15 @@ public class DepthSorting implements Filter<List<Face>> {
 
     @Override
     public void write(List<Face> faces) {
-        // TODO Dürfen wir Liste mit allen Faces übergeben? Dies müssten wir dann auch bei den vorhergehenden Filtern übergeben.
-        // Falls nein, wie sollen wir sortieren, wenn wir noch nicht wissen, was später kommt und wann alle Faces eines Models durch sind?
-        // Zum Sortieren müssen wir ja alle Faces haben, bevor wir sie sortieren und sortiert weitergeben können.
-
-
         // Painter's algorithm
-
         // 1. Find the average depth of each face
         List<Pair<Float,Face>> faceList = new LinkedList<>();
-        for(Face input : faces){
+
+        for(Face input : faces) {
             // erstellen von 3 Dimensionalen Vektoren, damit Rechnen später einfacher
-            Vec3 vertex1 = new  Vec3(input.getV1().getX(), input.getV1().getY(),input.getV1().getZ());
-            Vec3 vertex2 = new  Vec3(input.getV2().getX(), input.getV2().getY(),input.getV2().getZ());
-            Vec3 vertex3 = new  Vec3(input.getV3().getX(), input.getV3().getY(),input.getV3().getZ());
+            Vec3 vertex1 = input.getV1().toVec3();
+            Vec3 vertex2 = input.getV2().toVec3();
+            Vec3 vertex3 = input.getV3().toVec3();
 
             // Berechne Abstand von Camera zu den jeweiligen 3 Eckpunkten des Dreiecks (Face)
             float z1 = vertex1.subtract(pd.getViewingEye()).getLength();
@@ -48,7 +43,7 @@ public class DepthSorting implements Filter<List<Face>> {
             float z3 = vertex3.subtract(pd.getViewingEye()).getLength();
 
             // Berechne durchschnittlichen Abstand
-            float z = (z1 +z2+z3)/3;
+            float z = (z1+z2+z3)/3;
 
             // füge Abstand und Dreieck in Liste
             faceList.add(new Pair<>(z, input));
