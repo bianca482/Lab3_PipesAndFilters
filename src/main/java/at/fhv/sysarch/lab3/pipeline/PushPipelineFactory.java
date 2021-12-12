@@ -9,6 +9,8 @@ import at.fhv.sysarch.lab3.pipeline.push.pipe.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // Push from the source (model)
@@ -23,6 +25,8 @@ public class PushPipelineFactory {
         Pipe<Face> cullingPipe = new GenericPipe<>(backfaceCulling);
 
         // TODO 3. perform depth sorting in VIEW SPACE
+        // DepthSorting depthSorting = new DepthSorting(pd);
+        // Pipe<List<Face>> sortingPipe = new GenericPipe<>(depthSorting);
 
         // Add coloring (space unimportant)
         Coloring coloring = new Coloring(pd);

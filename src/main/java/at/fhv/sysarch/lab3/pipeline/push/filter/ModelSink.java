@@ -32,11 +32,12 @@ public class ModelSink implements Filter<Pair<Face, Color>> {
         RenderingMode renderingMode = pd.getRenderingMode();
 
         if (renderingMode.equals(RenderingMode.POINT)) {
-            context.setStroke(faceColorPair.snd());
+            context.setFill(faceColorPair.snd());
 
-            context.strokeLine(v1Trans.getX(), v1Trans.getY(), v2Trans.getX(), v2Trans.getY());
-            context.strokeLine(v1Trans.getX(), v1Trans.getY() , v3Trans.getX(), v3Trans.getY());
-            context.strokeLine(v2Trans.getX(), v2Trans.getY() , v3Trans.getX(), v3Trans.getY());
+            context.fillOval(v1Trans.getX(), v1Trans.getY(), 1, 1);
+            context.fillOval(v2Trans.getX(), v2Trans.getY(), 1, 1);
+            context.fillOval(v3Trans.getX(), v3Trans.getY(), 1, 1);
+
         } else if (renderingMode.equals(RenderingMode.WIREFRAME)) {
             context.setStroke(faceColorPair.snd());
 
@@ -46,5 +47,5 @@ public class ModelSink implements Filter<Pair<Face, Color>> {
 
             context.fillPolygon(new double[]{v1Screen.getX(), v2Screen.getX(), v3Screen.getX()}, new double[]{v1Screen.getY(), v2Screen.getY(), v3Screen.getY()}, 3);
         }
-   }
+    }
 }

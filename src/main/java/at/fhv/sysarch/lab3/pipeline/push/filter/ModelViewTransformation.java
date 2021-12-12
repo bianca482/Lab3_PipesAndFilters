@@ -30,7 +30,12 @@ public class ModelViewTransformation implements Filter<Face> {
         Vec4 v2Trans = viewTransform.multiply(input.getV2());
         Vec4 v3Trans = viewTransform.multiply(input.getV3());
 
-        input = new Face(v1Trans, v2Trans, v3Trans, input.getN1(), input.getN2(), input.getN3());
+        // Transformieren von Normalvektoren
+        Vec4 n1Trans = viewTransform.multiply(input.getN1());
+        Vec4 n2Trans = viewTransform.multiply(input.getN2());
+        Vec4 n3Trans = viewTransform.multiply(input.getN3());
+
+        input = new Face(v1Trans, v2Trans, v3Trans, n1Trans, n2Trans, n3Trans);
 
         successor.write(input);
     }
