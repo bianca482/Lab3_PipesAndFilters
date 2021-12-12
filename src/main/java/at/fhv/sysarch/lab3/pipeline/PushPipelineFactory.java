@@ -32,17 +32,21 @@ public class PushPipelineFactory {
         Coloring coloring = new Coloring(pd);
         Pipe<Face> colorPipe = new GenericPipe<>(coloring);
 
+        PerspectiveProjection perspectiveProjection;
+        Pipe<Face> perspectivePipe;
+
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. TODO perform lighting in VIEW SPACE
 
-            // 5. TODO perform projection transformation on VIEW SPACE coordinates
+            // 5. Perform projection transformation on VIEW SPACE coordinates
+            perspectiveProjection = new PerspectiveProjection(pd);
+            perspectivePipe = new GenericPipe<>(perspectiveProjection);
         } else {
-            // 5. TODO perform projection transformation
+            // 5. Perform projection transformation
+            perspectiveProjection = new PerspectiveProjection(pd);
+            perspectivePipe = new GenericPipe<>(perspectiveProjection);
         }
-
-        PerspectiveProjection perspectiveProjection = new PerspectiveProjection(pd);
-        Pipe<Face> perspectivePipe = new GenericPipe<>(perspectiveProjection);
 
         // Perform perspective division to screen coordinates
         ScreenSpaceTransform screenSpaceTransform = new ScreenSpaceTransform(pd);
