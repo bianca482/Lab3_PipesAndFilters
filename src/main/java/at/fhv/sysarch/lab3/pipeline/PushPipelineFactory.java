@@ -38,14 +38,22 @@ public class PushPipelineFactory {
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. TODO perform lighting in VIEW SPACE
+            FlatShading flatShading = new FlatShading(pd);
+            Pipe<Face> shadingPipe = new GenericPipe<>(flatShading);
+
+            backfaceCulling.setSuccessor(shadingPipe);
 
             // 5. Perform projection transformation on VIEW SPACE coordinates
             perspectiveProjection = new PerspectiveProjection(pd);
             perspectivePipe = new GenericPipe<>(perspectiveProjection);
+
+            flatShading.setSuccessor(perspectivePipe);
         } else {
             // 5. Perform projection transformation
             perspectiveProjection = new PerspectiveProjection(pd);
             perspectivePipe = new GenericPipe<>(perspectiveProjection);
+
+            backfaceCulling.setSuccessor(perspectivePipe);
         }
 
         // Perform perspective division to screen coordinates
@@ -58,7 +66,6 @@ public class PushPipelineFactory {
 
         source.setSuccessor(modelPipe);
         modelViewTransformation.setSuccessor(cullingPipe);
-        backfaceCulling.setSuccessor(perspectivePipe);
         perspectiveProjection.setSuccessor(screenSpacePipe);
         screenSpaceTransform.setSuccessor(colorPipe);
         coloring.setSuccessor(sinkPipe);

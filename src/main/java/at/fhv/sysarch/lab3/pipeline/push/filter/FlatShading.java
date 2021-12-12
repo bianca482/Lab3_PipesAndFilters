@@ -24,14 +24,14 @@ public class FlatShading implements Filter<Face> {
 
     @Override
     public void write(Face input) {
-        float transV1 = input.getV1().dot(input.getN1());
-        float transV2 = input.getV2().dot(input.getN2());
-        float transV3 = input.getV3().dot(input.getN3());
-
-        float result = pd.getLightPos().dot(new Vec3(transV1, transV2, transV3));
-
-        successor.write(new Face(input.getV1().multiply(result), input.getV2().multiply(result), input.getV3().multiply(result), input.getN1(), input.getN2(), input.getN3()));
-
+//        float transV1 = input.getV1().dot(input.getN1());
+//        float transV2 = input.getV2().dot(input.getN2());
+//        float transV3 = input.getV3().dot(input.getN3());
+//
+//        float result = pd.getLightPos().dot(new Vec3(transV1, transV2, transV3));
+//
+//        successor.write(new Face(input.getV1().multiply(result), input.getV2().multiply(result), input.getV3().multiply(result), input.getN1(), input.getN2(), input.getN3()));
+        successor.write(input);
     }
 
     public void setSuccessor(Pipe<Face> successor) {
