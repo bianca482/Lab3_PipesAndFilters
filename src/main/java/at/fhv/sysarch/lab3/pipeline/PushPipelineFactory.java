@@ -20,7 +20,7 @@ public class PushPipelineFactory {
         ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd);
         Pipe<Face> modelPipe = new GenericPipe<>(modelViewTransformation);
 
-        // TODO 2. perform backface culling in VIEW SPACE
+        // Backface culling in VIEW SPACE
         BackfaceCulling backfaceCulling = new BackfaceCulling(pd);
         Pipe<Face> cullingPipe = new GenericPipe<>(backfaceCulling);
 
@@ -44,7 +44,7 @@ public class PushPipelineFactory {
         PerspectiveProjection perspectiveProjection = new PerspectiveProjection(pd);
         Pipe<Face> perspectivePipe = new GenericPipe<>(perspectiveProjection);
 
-        // TODO 6. perform perspective division to screen coordinates
+        // Perform perspective division to screen coordinates
         ScreenSpaceTransform screenSpaceTransform = new ScreenSpaceTransform(pd);
         Pipe<Face> screenSpacePipe = new GenericPipe<>(screenSpaceTransform);
 
