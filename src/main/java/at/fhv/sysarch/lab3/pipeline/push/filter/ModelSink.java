@@ -45,9 +45,6 @@ public class ModelSink implements Filter<Pair<Face, Color>> {
             context.setFill(faceColorPair.snd());
 
             context.fillPolygon(new double[]{v1Screen.getX(), v2Screen.getX(), v3Screen.getX()}, new double[]{v1Screen.getY(), v2Screen.getY(), v3Screen.getY()}, 3);
-
-//            context.strokePolygon(new double[]{v1Screen.getX(), v2Screen.getX(), v3Screen.getX()}, new double[]{v1Screen.getY(), v2Screen.getY(), v3Screen.getY()}, 3);
-//            context.setStroke(faceColorPair.snd());
         }
     }
 }

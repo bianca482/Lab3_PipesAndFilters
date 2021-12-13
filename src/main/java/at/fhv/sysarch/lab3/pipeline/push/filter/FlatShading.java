@@ -40,15 +40,10 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
 
         // Kosinus Wert für den Winkel zwischen Normalvektor und Richtungsvektor berechnen
         double cosAlpha = (directionVector.dot(normalVector)) / (directionVector.getLength() * normalVector.getLength());
-        // Da wir den Winkel zwischen Normalvektor und Richtungsvektor berechnet haben, rechnen wir noch '1-'
-        double brightness = 1 - cosAlpha;
 
         // Geht der Kosinus Wert gegen 0, scheint das Licht senkrecht auf die Fläche, und die Fläche sollte maximale Helligkeit haben
         // Anpassen der Farbhelligkeit
         Color color = Color.BLACK.interpolate(pair.snd(), cosAlpha);
-        //Color color = pair.snd().darker().interpolate(pair.snd(), brightness);
-
-        //Position der Beleuchtungsquelle -> davon die Normale berechnen und mit Color.interpolate() mit Wert der Beleuchtungsposition
 
         successor.write(new Pair<>(input, color));
     }
