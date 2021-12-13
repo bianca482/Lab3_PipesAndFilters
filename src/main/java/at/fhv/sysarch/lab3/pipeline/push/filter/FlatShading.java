@@ -29,21 +29,24 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
 
         Face input = pair.fst();
 
-        // Normalvektor  anteile aus 4 dimensionalem Vektor in 3 dimensionalem Vektor speichern
+        // Normalvektor berechnen: Anteile aus 4 dimensionalem Vektor in 3 dimensionalem Vektor speichern
         Vec3 normalVector = new Vec3(input.getN1().getX(), input.getN1().getY(), input.getN1().getZ());
 
-        // Vierdimensionaler Vektor in drei dimensionalen Vektor speichern
+        // Vierdimensionaler Vektor in drei dimensionalem Vektor speichern
         Vec3 vertexV3 = new Vec3(input.getV1().toVec3());
 
         // Richtungsvektor berechnen
         Vec3 directionVector = pd.getLightPos().subtract(vertexV3);
 
-        // Kosinus Wert für den Winkel zwischen Normalvektor und Richtungsvektor
+        // Kosinus Wert für den Winkel zwischen Normalvektor und Richtungsvektor berechnen
         double cosAlpha = (directionVector.dot(normalVector)) / (directionVector.getLength() * normalVector.getLength());
-
+        // Da wir den Winkel zwischen Normalvektor und Richtungsvektor berechnet haben, rechnen wir noch '1-'
         double brightness = 1 - cosAlpha;
 
-        Color color = Color.BLACK.interpolate(pair.snd(), brightness);
+        // Geht der Kosinus Wert gegen 0, scheint das Licht senkrecht auf die Fläche, und die Fläche sollte maximale Helligkeit haben
+        // Anpassen der Farbhelligkeit
+        // Color color = Color.BLACK.interpolate(pair.snd(), brightness);
+        Color color = pair.snd().darker().interpolate(pair.snd(), brightness);
 
         //Position der Beleuchtungsquelle -> davon die Normale berechnen und mit Color.interpolate() mit Wert der Beleuchtungsposition
 
