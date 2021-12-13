@@ -3,13 +3,13 @@ package at.fhv.sysarch.lab3.pipeline.push.filter;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
-import at.fhv.sysarch.lab3.pipeline.push.pipe.Pipe;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import javafx.scene.paint.Color;
 
-public class Coloring implements Filter<Face> {
+public class Coloring implements PushFilter<Face> {
 
     private final PipelineData pd;
-    private Pipe<Pair<Face, Color>> successor;
+    private PushPipe<Pair<Face, Color>> successor;
 
     public Coloring(PipelineData pd) {
         this.pd = pd;
@@ -31,7 +31,7 @@ public class Coloring implements Filter<Face> {
         successor.write(faceColorPair);
     }
 
-    public void setSuccessor(Pipe<Pair<Face, Color>> successor) {
+    public void setSuccessor(PushPipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }
 }

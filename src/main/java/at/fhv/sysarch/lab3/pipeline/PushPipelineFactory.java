@@ -18,58 +18,58 @@ public class PushPipelineFactory {
 
         // 1. Perform model-view transformation from model to VIEW SPACE coordinates
         ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd);
-        Pipe<List<Face>> modelPipe = new GenericPipe<>(modelViewTransformation);
+        PushPipe<List<Face>> modelPushPipe = new GenericPushPipe<>(modelViewTransformation);
 
         // 2. Backface culling in VIEW SPACE
         BackfaceCulling backfaceCulling = new BackfaceCulling(pd);
-        Pipe<List<Face>> cullingPipe = new GenericPipe<>(backfaceCulling);
+        PushPipe<List<Face>> cullingPushPipe = new GenericPushPipe<>(backfaceCulling);
 
         // 3. perform depth sorting in VIEW SPACE
         DepthSorting depthSorting = new DepthSorting(pd);
-        Pipe<List<Face>> sortingPipe = new GenericPipe<>(depthSorting);
+        PushPipe<List<Face>> sortingPushPipe = new GenericPushPipe<>(depthSorting);
 
         // 4. Add coloring (space unimportant)
         Coloring coloring = new Coloring(pd);
-        Pipe<Face> colorPipe = new GenericPipe<>(coloring);
+        PushPipe<Face> colorPushPipe = new GenericPushPipe<>(coloring);
 
         PerspectiveProjection perspectiveProjection;
-        Pipe<Pair<Face, Color>> perspectivePipe;
+        PushPipe<Pair<Face, Color>> perspectivePushPipe;
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. Perform lighting in VIEW SPACE
             FlatShading flatShading = new FlatShading(pd);
-            Pipe<Pair<Face, Color>> shadingPipe = new GenericPipe<>(flatShading);
+            PushPipe<Pair<Face, Color>> shadingPushPipe = new GenericPushPipe<>(flatShading);
 
-            coloring.setSuccessor(shadingPipe);
+            coloring.setSuccessor(shadingPushPipe);
 
             // 5. Perform projection transformation on VIEW SPACE coordinates
             perspectiveProjection = new PerspectiveProjection(pd);
-            perspectivePipe = new GenericPipe<>(perspectiveProjection);
+            perspectivePushPipe = new GenericPushPipe<>(perspectiveProjection);
 
-            flatShading.setSuccessor(perspectivePipe);
+            flatShading.setSuccessor(perspectivePushPipe);
         } else {
             // 5. Perform projection transformation
             perspectiveProjection = new PerspectiveProjection(pd);
-            perspectivePipe = new GenericPipe<>(perspectiveProjection);
+            perspectivePushPipe = new GenericPushPipe<>(perspectiveProjection);
 
-            coloring.setSuccessor(perspectivePipe);
+            coloring.setSuccessor(perspectivePushPipe);
         }
 
         // Perform perspective division to screen coordinates
         ScreenSpaceTransform screenSpaceTransform = new ScreenSpaceTransform(pd);
-        Pipe<Pair<Face, Color>> screenSpacePipe = new GenericPipe<>(screenSpaceTransform);
+        PushPipe<Pair<Face, Color>> screenSpacePushPipe = new GenericPushPipe<>(screenSpaceTransform);
 
         // Feed into the sink (renderer)
-        Filter<Pair<Face, Color>> sink = new ModelSink(pd, pd.getGraphicsContext());
-        Pipe<Pair<Face, Color>> sinkPipe = new GenericPipe<>(sink);
+        PushFilter<Pair<Face, Color>> sink = new ModelSink(pd, pd.getGraphicsContext());
+        PushPipe<Pair<Face, Color>> sinkPushPipe = new GenericPushPipe<>(sink);
 
-        source.setSuccessor(modelPipe);
-        modelViewTransformation.setSuccessor(cullingPipe);
-        backfaceCulling.setSuccessor(sortingPipe);
-        depthSorting.setSuccessor(colorPipe);
-        perspectiveProjection.setSuccessor(screenSpacePipe);
-        screenSpaceTransform.setSuccessor(sinkPipe);
+        source.setSuccessor(modelPushPipe);
+        modelViewTransformation.setSuccessor(cullingPushPipe);
+        backfaceCulling.setSuccessor(sortingPushPipe);
+        depthSorting.setSuccessor(colorPushPipe);
+        perspectiveProjection.setSuccessor(screenSpacePushPipe);
+        screenSpaceTransform.setSuccessor(sinkPushPipe);
 
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction

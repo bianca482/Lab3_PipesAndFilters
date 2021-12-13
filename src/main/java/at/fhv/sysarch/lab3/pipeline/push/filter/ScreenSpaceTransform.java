@@ -3,14 +3,14 @@ package at.fhv.sysarch.lab3.pipeline.push.filter;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
-import at.fhv.sysarch.lab3.pipeline.push.pipe.Pipe;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Vec4;
 import javafx.scene.paint.Color;
 
-public class ScreenSpaceTransform implements Filter<Pair<Face, Color>> {
+public class ScreenSpaceTransform implements PushFilter<Pair<Face, Color>> {
     private PipelineData pd;
-    private Pipe<Pair<Face, Color>> successor;
+    private PushPipe<Pair<Face, Color>> successor;
 
     public ScreenSpaceTransform(PipelineData pd) {
         this.pd = pd;
@@ -49,7 +49,7 @@ public class ScreenSpaceTransform implements Filter<Pair<Face, Color>> {
         successor.write(newInput);
     }
 
-    public void setSuccessor(Pipe<Pair<Face, Color>> successor) {
+    public void setSuccessor(PushPipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }
 }

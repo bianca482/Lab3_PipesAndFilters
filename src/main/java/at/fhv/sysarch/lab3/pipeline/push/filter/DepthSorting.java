@@ -3,7 +3,7 @@ package at.fhv.sysarch.lab3.pipeline.push.filter;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
-import at.fhv.sysarch.lab3.pipeline.push.pipe.Pipe;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import com.hackoeur.jglm.Vec3;
 
 import java.util.LinkedList;
@@ -16,13 +16,13 @@ This has the effect that we render the faces back-to-front, which results in fac
 You need a single z value of each face, for sorting purposes, therefore compute the average of all z values of a face which gives a good result compared to its computational effort (other options are min/max or simply picking a fixed vertex).
  */
 
-public class DepthSorting implements Filter<List<Face>> {
+public class DepthSorting implements PushFilter<List<Face>> {
 
     public DepthSorting(PipelineData pd) {
         this.pd = pd;
     }
 
-    private Pipe<Face> successor;
+    private PushPipe<Face> successor;
     private PipelineData pd;
 
     @Override
@@ -61,7 +61,7 @@ public class DepthSorting implements Filter<List<Face>> {
 
     }
 
-    public void setSuccessor (Pipe < Face > successor) {
+    public void setSuccessor (PushPipe< Face > successor) {
         this.successor = successor;
     }
 }

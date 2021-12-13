@@ -3,7 +3,7 @@ package at.fhv.sysarch.lab3.pipeline.push.filter;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
-import at.fhv.sysarch.lab3.pipeline.push.pipe.Pipe;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import com.hackoeur.jglm.Vec3;
 import javafx.scene.paint.Color;
 
@@ -16,9 +16,9 @@ Therefore, you simply need to calculate the normalised normal vector between the
 which you can obtain from PipelineData.getLightPos.
 With this normal you compute the dot product between the face normal.
  */
-public class FlatShading implements Filter<Pair<Face, Color>> {
+public class FlatShading implements PushFilter<Pair<Face, Color>> {
     private PipelineData pd;
-    private Pipe<Pair<Face, Color>> successor;
+    private PushPipe<Pair<Face, Color>> successor;
 
     public FlatShading(PipelineData pd) {
         this.pd = pd;
@@ -48,7 +48,7 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
         successor.write(new Pair<>(input, color));
     }
 
-    public void setSuccessor(Pipe<Pair<Face, Color>> successor) {
+    public void setSuccessor(PushPipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }
 }

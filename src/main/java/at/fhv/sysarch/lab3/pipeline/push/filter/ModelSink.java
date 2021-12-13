@@ -9,7 +9,7 @@ import com.hackoeur.jglm.Vec4;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class ModelSink implements Filter<Pair<Face, Color>> {
+public class ModelSink implements PushFilter<Pair<Face, Color>> {
 
     private final GraphicsContext context;
     private PipelineData pd;
