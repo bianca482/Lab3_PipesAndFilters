@@ -37,7 +37,7 @@ public class PushPipelineFactory {
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
-            // 4a. TODO perform lighting in VIEW SPACE
+            // 4a. Perform lighting in VIEW SPACE
             FlatShading flatShading = new FlatShading(pd);
             Pipe<Pair<Face, Color>> shadingPipe = new GenericPipe<>(flatShading);
 
