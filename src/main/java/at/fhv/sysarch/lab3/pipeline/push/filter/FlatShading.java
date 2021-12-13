@@ -25,7 +25,27 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
     }
 
     @Override
-    public void write(Pair<Face, Color> input) {
+    public void write(Pair<Face, Color> pair) {
+
+        Face input = pair.fst();
+
+        // Normalvektor  anteile aus 4 dimensionalem Vektor in 3 dimensionalem Vektor speichern
+        Vec3 normalVector = new Vec3(input.getN1().getX(), input.getN1().getY(), input.getN1().getZ());
+
+        // Vierdimensionaler Vektor in drei dimensionalen Vektor speichern
+        Vec3 vertexV3 = new Vec3(input.getV1().toVec3());
+
+        // Richtungsvektor berechnen
+        Vec3 directionVector = pd.getLightPos().subtract(vertexV3);
+
+        // Kosinus Wert für den Winkel zwischen Normalvektor und Richtungsvektor
+        double cosAlpha = (directionVector.dot(normalVector)) / (directionVector.getLength() * normalVector.getLength());
+
+        double brightness = 1 - cosAlpha;
+
+
+
+
 //        float transV1 = input.getV1().dot(input.getN1());
 //        float transV2 = input.getV2().dot(input.getN2());
 //        float transV3 = input.getV3().dot(input.getN3());
@@ -36,7 +56,7 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
 
         //Position der Beleuchtungsquelle -> davon die Normale berechnen und mit Color.interpolate() mit Wert der Beleuchtungsposition
 
-        successor.write(input);
+        // successor.write(input);
     }
 
     public void setSuccessor(Pipe<Pair<Face, Color>> successor) {
