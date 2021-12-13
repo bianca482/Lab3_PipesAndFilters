@@ -2,8 +2,10 @@ package at.fhv.sysarch.lab3.pipeline.push.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
+import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.Pipe;
 import com.hackoeur.jglm.Vec3;
+import javafx.scene.paint.Color;
 
 /*
 To measure the angle between the light ray and the vertex use the normal vector
@@ -14,16 +16,16 @@ Therefore, you simply need to calculate the normalised normal vector between the
 which you can obtain from PipelineData.getLightPos.
 With this normal you compute the dot product between the face normal.
  */
-public class FlatShading implements Filter<Face> {
+public class FlatShading implements Filter<Pair<Face, Color>> {
     private PipelineData pd;
-    private Pipe<Face> successor;
+    private Pipe<Pair<Face, Color>> successor;
 
     public FlatShading(PipelineData pd) {
         this.pd = pd;
     }
 
     @Override
-    public void write(Face input) {
+    public void write(Pair<Face, Color> input) {
 //        float transV1 = input.getV1().dot(input.getN1());
 //        float transV2 = input.getV2().dot(input.getN2());
 //        float transV3 = input.getV3().dot(input.getN3());
@@ -31,10 +33,13 @@ public class FlatShading implements Filter<Face> {
 //        float result = pd.getLightPos().dot(new Vec3(transV1, transV2, transV3));
 //
 //        successor.write(new Face(input.getV1().multiply(result), input.getV2().multiply(result), input.getV3().multiply(result), input.getN1(), input.getN2(), input.getN3()));
+
+        //Position der Beleuchtungsquelle -> davon die Normale berechnen und mit Color.interpolate() mit Wert der Beleuchtungsposition
+
         successor.write(input);
     }
 
-    public void setSuccessor(Pipe<Face> successor) {
+    public void setSuccessor(Pipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }
 }

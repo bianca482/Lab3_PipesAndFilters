@@ -16,32 +16,32 @@ public class PushPipelineFactory {
         // Push from the source (model)
         ModelSource source = new ModelSource();
 
-        // Perform model-view transformation from model to VIEW SPACE coordinates
+        // 1. Perform model-view transformation from model to VIEW SPACE coordinates
         ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd);
         Pipe<List<Face>> modelPipe = new GenericPipe<>(modelViewTransformation);
 
-        // Backface culling in VIEW SPACE
+        // 2. Backface culling in VIEW SPACE
         BackfaceCulling backfaceCulling = new BackfaceCulling(pd);
         Pipe<List<Face>> cullingPipe = new GenericPipe<>(backfaceCulling);
 
-        // TODO 3. perform depth sorting in VIEW SPACE
+        // 3. perform depth sorting in VIEW SPACE
         DepthSorting depthSorting = new DepthSorting(pd);
         Pipe<List<Face>> sortingPipe = new GenericPipe<>(depthSorting);
 
-        // Add coloring (space unimportant)
+        // 4. Add coloring (space unimportant)
         Coloring coloring = new Coloring(pd);
         Pipe<Face> colorPipe = new GenericPipe<>(coloring);
 
         PerspectiveProjection perspectiveProjection;
-        Pipe<Face> perspectivePipe;
+        Pipe<Pair<Face, Color>> perspectivePipe;
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. TODO perform lighting in VIEW SPACE
             FlatShading flatShading = new FlatShading(pd);
-            Pipe<Face> shadingPipe = new GenericPipe<>(flatShading);
+            Pipe<Pair<Face, Color>> shadingPipe = new GenericPipe<>(flatShading);
 
-            depthSorting.setSuccessor(shadingPipe);
+            coloring.setSuccessor(shadingPipe);
 
             // 5. Perform projection transformation on VIEW SPACE coordinates
             perspectiveProjection = new PerspectiveProjection(pd);
@@ -53,12 +53,12 @@ public class PushPipelineFactory {
             perspectiveProjection = new PerspectiveProjection(pd);
             perspectivePipe = new GenericPipe<>(perspectiveProjection);
 
-            depthSorting.setSuccessor(perspectivePipe);
+            coloring.setSuccessor(perspectivePipe);
         }
 
         // Perform perspective division to screen coordinates
         ScreenSpaceTransform screenSpaceTransform = new ScreenSpaceTransform(pd);
-        Pipe<Face> screenSpacePipe = new GenericPipe<>(screenSpaceTransform);
+        Pipe<Pair<Face, Color>> screenSpacePipe = new GenericPipe<>(screenSpaceTransform);
 
         // Feed into the sink (renderer)
         Filter<Pair<Face, Color>> sink = new ModelSink(pd, pd.getGraphicsContext());
@@ -67,9 +67,9 @@ public class PushPipelineFactory {
         source.setSuccessor(modelPipe);
         modelViewTransformation.setSuccessor(cullingPipe);
         backfaceCulling.setSuccessor(sortingPipe);
+        depthSorting.setSuccessor(colorPipe);
         perspectiveProjection.setSuccessor(screenSpacePipe);
-        screenSpaceTransform.setSuccessor(colorPipe);
-        coloring.setSuccessor(sinkPipe);
+        screenSpaceTransform.setSuccessor(sinkPipe);
 
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
