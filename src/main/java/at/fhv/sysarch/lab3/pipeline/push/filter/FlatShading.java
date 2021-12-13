@@ -36,8 +36,7 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
         Vec3 vertexV3 = input.getV1().toVec3();
 
         // Richtungsvektor berechnen
-        //Vec3 directionVector = pd.getLightPos().subtract(vertexV3);
-        Vec3 directionVector = pd.getLightPos().cross(vertexV3);
+        Vec3 directionVector = pd.getLightPos().subtract(vertexV3);
 
         // Kosinus Wert für den Winkel zwischen Normalvektor und Richtungsvektor berechnen
         double cosAlpha = (directionVector.dot(normalVector)) / (directionVector.getLength() * normalVector.getLength());
@@ -46,7 +45,7 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
 
         // Geht der Kosinus Wert gegen 0, scheint das Licht senkrecht auf die Fläche, und die Fläche sollte maximale Helligkeit haben
         // Anpassen der Farbhelligkeit
-        Color color = Color.BLACK.interpolate(pair.snd(), brightness);
+        Color color = Color.BLACK.interpolate(pair.snd(), cosAlpha);
         //Color color = pair.snd().darker().interpolate(pair.snd(), brightness);
 
         //Position der Beleuchtungsquelle -> davon die Normale berechnen und mit Color.interpolate() mit Wert der Beleuchtungsposition
