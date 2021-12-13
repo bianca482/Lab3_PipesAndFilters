@@ -56,7 +56,7 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
 
         //Position der Beleuchtungsquelle -> davon die Normale berechnen und mit Color.interpolate() mit Wert der Beleuchtungsposition
 
-        // successor.write(input);
+        successor.write(pair);
     }
 
     public void setSuccessor(Pipe<Pair<Face, Color>> successor) {
