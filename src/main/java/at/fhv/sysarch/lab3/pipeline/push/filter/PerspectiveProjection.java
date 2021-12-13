@@ -20,11 +20,13 @@ public class PerspectiveProjection implements Filter<Pair<Face, Color>> {
     public void write(Pair<Face, Color> input) {
         Mat4 projTransform = pd.getProjTransform();
 
-        Vec4 v1Trans = projTransform.multiply(input.fst().getV1());
-        Vec4 v2Trans = projTransform.multiply(input.fst().getV2());
-        Vec4 v3Trans = projTransform.multiply(input.fst().getV3());
+        Face face = input.fst();
 
-        Pair<Face, Color> newInput = new Pair<>(new Face(v1Trans, v2Trans, v3Trans, input.fst().getN1(), input.fst().getN2(), input.fst().getN3()), input.snd());
+        Vec4 v1Trans = projTransform.multiply(face.getV1());
+        Vec4 v2Trans = projTransform.multiply(face.getV2());
+        Vec4 v3Trans = projTransform.multiply(face.getV3());
+
+        Pair<Face, Color> newInput = new Pair<>(new Face(v1Trans, v2Trans, v3Trans, input.fst().getN1(), face.getN2(), face.getN3()), input.snd());
 
         successor.write(newInput);
     }

@@ -20,18 +20,20 @@ public class ScreenSpaceTransform implements Filter<Pair<Face, Color>> {
     public void write(Pair<Face, Color> input) {
         Mat4 viewportTransform = pd.getViewportTransform();
 
-        //Jede Komponente des Vektors durch W dividieren
-        float dividedV1X = input.fst().getV1().getX() / input.fst().getV1().getW();
-        float dividedV1Y = input.fst().getV1().getY() / input.fst().getV1().getW();
-        float dividedV1Z = input.fst().getV1().getZ() / input.fst().getV1().getW();
+        Face face = input.fst();
 
-        float dividedV2X = input.fst().getV2().getX() / input.fst().getV2().getW();
-        float dividedV2Y = input.fst().getV2().getY() / input.fst().getV2().getW();
+        //Jede Komponente des Vektors durch W dividieren
+        float dividedV1X = face.getV1().getX() / face.getV1().getW();
+        float dividedV1Y = face.getV1().getY() / face.getV1().getW();
+        float dividedV1Z = face.getV1().getZ() / face.getV1().getW();
+
+        float dividedV2X = face.getV2().getX() / face.getV2().getW();
+        float dividedV2Y = face.getV2().getY() / face.getV2().getW();
         float dividedV2Z = input.fst().getV2().getZ() / input.fst().getV2().getW();
 
-        float dividedV3X = input.fst().getV3().getX() / input.fst().getV3().getW();
-        float dividedV3Y = input.fst().getV3().getY() / input.fst().getV3().getW();
-        float dividedV3Z = input.fst().getV3().getZ() / input.fst().getV3().getW();
+        float dividedV3X = face.getV3().getX() / face.getV3().getW();
+        float dividedV3Y = face.getV3().getY() / face.getV3().getW();
+        float dividedV3Z = face.getV3().getZ() / face.getV3().getW();
 
         Vec4 newVector1 = new Vec4(dividedV1X, dividedV1Y, dividedV1Z, 1);
         Vec4 newVector2 = new Vec4(dividedV2X, dividedV2Y, dividedV2Z, 1);
@@ -42,7 +44,7 @@ public class ScreenSpaceTransform implements Filter<Pair<Face, Color>> {
         Vec4 v2Trans = viewportTransform.multiply(newVector2);
         Vec4 v3Trans = viewportTransform.multiply(newVector3);
 
-        Pair<Face, Color> newInput = new Pair<>(new Face(v1Trans, v2Trans, v3Trans, input.fst().getN1(), input.fst().getN2(), input.fst().getN3()), input.snd());
+        Pair<Face, Color> newInput = new Pair<>(new Face(v1Trans, v2Trans, v3Trans, face.getN1(), face.getN2(), face.getN3()), input.snd());
 
         successor.write(newInput);
     }
