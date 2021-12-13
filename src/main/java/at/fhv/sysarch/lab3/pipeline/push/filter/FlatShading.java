@@ -43,20 +43,11 @@ public class FlatShading implements Filter<Pair<Face, Color>> {
 
         double brightness = 1 - cosAlpha;
 
-
-
-
-//        float transV1 = input.getV1().dot(input.getN1());
-//        float transV2 = input.getV2().dot(input.getN2());
-//        float transV3 = input.getV3().dot(input.getN3());
-//
-//        float result = pd.getLightPos().dot(new Vec3(transV1, transV2, transV3));
-//
-//        successor.write(new Face(input.getV1().multiply(result), input.getV2().multiply(result), input.getV3().multiply(result), input.getN1(), input.getN2(), input.getN3()));
+        Color color = Color.BLACK.interpolate(pair.snd(), brightness);
 
         //Position der Beleuchtungsquelle -> davon die Normale berechnen und mit Color.interpolate() mit Wert der Beleuchtungsposition
 
-        successor.write(pair);
+        successor.write(new Pair<Face, Color>(input, color));
     }
 
     public void setSuccessor(Pipe<Pair<Face, Color>> successor) {
