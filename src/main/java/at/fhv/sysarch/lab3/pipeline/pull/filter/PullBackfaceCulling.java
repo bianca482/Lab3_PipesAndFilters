@@ -22,18 +22,24 @@ public class PullBackfaceCulling implements PullFilter<Face> {
 
     @Override
     public Face read() {
-        Face face = predecessor.read();
+        Face face = null;
+        boolean nothingToReturn = true;
 
-        if (face == null) {
-            return null;
-        }
+        while (nothingToReturn) {
+            face = predecessor.read();
+            if (face == null) {
+                return null;
+            }
 
-        Vec3 n1 = new Vec3(face.getN1().getX(), face.getN1().getY(), face.getN1().getZ());
-        // Skalarprodukt berechnen
-        float dot = n1.dot(viewingDirVector);
-        // Falls Skalarprodukt größer 0, dann wirf dieses Faces weg.
-        if (dot > 0) {
-            return null;
+            Vec3 n1 = new Vec3(face.getN1().getX(), face.getN1().getY(), face.getN1().getZ());
+            // Skalarprodukt berechnen
+            float dot = n1.dot(viewingDirVector);
+            // Falls Skalarprodukt größer 0, dann wirf dieses Faces weg.
+            if (dot > 0) {
+                face = null;
+            } else {
+                nothingToReturn = false;
+            }
         }
         return face;
     }
