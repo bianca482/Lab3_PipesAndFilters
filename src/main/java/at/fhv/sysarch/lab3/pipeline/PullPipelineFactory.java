@@ -1,8 +1,12 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
+import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
 import at.fhv.sysarch.lab3.pipeline.pull.filter.ModelSource;
+import at.fhv.sysarch.lab3.pipeline.pull.filter.ModelViewTransformation;
+import at.fhv.sysarch.lab3.pipeline.pull.pipe.GenericPullPipe;
+import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import javafx.animation.AnimationTimer;
 
 public class PullPipelineFactory {
@@ -10,7 +14,9 @@ public class PullPipelineFactory {
         // Pull from the source (model)
         ModelSource modelSource = new ModelSource();
 
-        // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
+        // 1. Perform model-view transformation from model to VIEW SPACE coordinates
+        ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd);
+        PullPipe<Face> modelViewPipe = new GenericPullPipe<>(modelSource);
 
         // TODO 2. perform backface culling in VIEW SPACE
 
@@ -30,6 +36,8 @@ public class PullPipelineFactory {
         // TODO 6. perform perspective division to screen coordinates
 
         // TODO 7. feed into the sink (renderer)
+
+        modelViewTransformation.setPredecessor(modelViewPipe);
 
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
