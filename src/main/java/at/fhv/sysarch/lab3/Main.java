@@ -20,17 +20,17 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-//    private final static int VIEW_WIDTH  = 860;
-//    private final static int VIEW_HEIGHT = 540;
-    private final static int VIEW_WIDTH  = 700;
+    // private final static int VIEW_WIDTH  = 860;
+    // private final static int VIEW_HEIGHT = 540;
+    private final static int VIEW_WIDTH = 700;
     private final static int VIEW_HEIGHT = 400;
 
-    private final static int SCENE_WIDTH  = VIEW_WIDTH * 2;
+    private final static int SCENE_WIDTH = VIEW_WIDTH * 2;
     private final static int SCENE_HEIGHT = VIEW_HEIGHT * 2;
 
-//    private final static boolean USE_PUSH_PIPELINE = false;
+    // private final static boolean USE_PUSH_PIPELINE = false;
     private final static boolean USE_PUSH_PIPELINE = true;
-    
+
     @Override
     public void start(Stage stage) throws IOException {
         File f = new File("resources/teapot.obj");
@@ -38,7 +38,7 @@ public class Main extends Application {
 
         Group root = new Group();
         Scene s = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, Color.BLACK);
-        
+
         final Canvas c1 = new Canvas(VIEW_WIDTH, VIEW_HEIGHT);
         final Canvas c2 = new Canvas(VIEW_WIDTH, VIEW_HEIGHT);
         final Canvas c3 = new Canvas(VIEW_WIDTH, VIEW_HEIGHT);
@@ -57,24 +57,24 @@ public class Main extends Application {
 
         om.ifPresent(m -> {
             PipelineData pd1 = new PipelineData.Builder(c1, m, VIEW_WIDTH, VIEW_HEIGHT)
-                                    .setModelColor(Color.ORANGE)
-                                    .build();
+                    .setModelColor(Color.ORANGE)
+                    .build();
 
             PipelineData pd2 = new PipelineData.Builder(c2, m, VIEW_WIDTH, VIEW_HEIGHT)
-                                    .setModelColor(Color.DARKGREEN)
-                                    .setRenderingMode(RenderingMode.WIREFRAME)
-                                    .build();
+                    .setModelColor(Color.DARKGREEN)
+                    .setRenderingMode(RenderingMode.WIREFRAME)
+                    .build();
 
             PipelineData pd3 = new PipelineData.Builder(c3, m, VIEW_WIDTH, VIEW_HEIGHT)
-                                    .setModelColor(Color.RED)
-                                    .setRenderingMode(RenderingMode.FILLED)
-                                    .build();
+                    .setModelColor(Color.RED)
+                    .setRenderingMode(RenderingMode.FILLED)
+                    .build();
 
             PipelineData pd4 = new PipelineData.Builder(c4, m, VIEW_WIDTH, VIEW_HEIGHT)
-                                    .setModelColor(Color.BLUE)
-                                    .setRenderingMode(RenderingMode.FILLED)
-                                    .setPerformLighting(true)
-                                    .build();
+                    .setModelColor(Color.BLUE)
+                    .setRenderingMode(RenderingMode.FILLED)
+                    .setPerformLighting(true)
+                    .build();
 
             AnimationTimer anim1;
             AnimationTimer anim2;

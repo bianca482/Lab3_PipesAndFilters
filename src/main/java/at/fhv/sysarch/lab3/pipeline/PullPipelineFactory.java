@@ -2,11 +2,13 @@ package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.pull.filter.ModelSource;
 import javafx.animation.AnimationTimer;
 
 public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
-        // TODO: pull from the source (model)
+        // Pull from the source (model)
+        ModelSource modelSource = new ModelSource();
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
 
@@ -41,6 +43,9 @@ public class PullPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
+                // Wenn Rendering aufgerufen wird, Faces für modelSource updaten
+                modelSource.UpdateData(model.getFaces());
+
                 // TODO compute rotation in radians
 
                 // TODO create new model rotation matrix using pd.getModelRotAxis and Matrices.rotate
