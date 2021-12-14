@@ -36,14 +36,22 @@ public class PullPipelineFactory {
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. TODO perform lighting in VIEW SPACE
-            
+            PullFlatShading pullFlatShading = new PullFlatShading(pd);
+            PullPipe<Pair<Face, Color>> flatShadingPipe = new GenericPullPipe<>(pullFlatShading);
+
+            pullFlatShading.setPredecessor(perspectivePipe);
+
             // 5. TODO perform projection transformation on VIEW SPACE coordinates
             pullPerspectiveProjection = new PullPerspectiveProjection(pd);
             screenPipe = new GenericPullPipe<>(pullPerspectiveProjection);
+
+            pullPerspectiveProjection.setPredecessor(flatShadingPipe);
         } else {
             // 5. TODO perform projection transformation
             pullPerspectiveProjection = new PullPerspectiveProjection(pd);
             screenPipe = new GenericPullPipe<>(pullPerspectiveProjection);
+
+            pullPerspectiveProjection.setPredecessor(perspectivePipe);
         }
 
         // TODO 6. perform perspective division to screen coordinates
@@ -57,7 +65,6 @@ public class PullPipelineFactory {
         pullModelViewTransformation.setPredecessor(modelViewPipe);
         pullBackfaceCulling.setPredecessor(cullingPipe);
         pullColoring.setPredecessor(colorPipe);
-        pullPerspectiveProjection.setPredecessor(perspectivePipe);
         pullScreenSpaceTransform.setPredecessor(screenPipe);
         pullModelSink.setPredecessor(sinkPullPipe);
 

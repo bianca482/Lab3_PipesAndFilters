@@ -29,6 +29,7 @@ public class PullFlatShading implements PullFilter<Pair<Face, Color>> {
     public Pair<Face, Color> read() {
 
         Pair<Face, Color> pair = predecessor.read();
+
         if (pair == null) {
             return null;
         }
