@@ -14,56 +14,59 @@ public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // Pull from the source (model)
         PullModelSource pullModelSource = new PullModelSource();
-        PullPipe<Face> modelViewPipe = new GenericPullPipe<>(pullModelSource);
 
         // 1. Perform model-view transformation from model to VIEW SPACE coordinates
         PullModelViewTransformation pullModelViewTransformation = new PullModelViewTransformation(pd);
+        PullPipe<Face> modelViewPipe = new GenericPullPipe<>(pullModelSource);
+
+        // 2. Backface culling in VIEW SPACE
+        PullBackfaceCulling pullBackfaceCulling = new PullBackfaceCulling(pd);
         PullPipe<Face> cullingPipe = new GenericPullPipe<>(pullModelViewTransformation);
 
-        // TODO 2. perform backface culling in VIEW SPACE
-        PullBackfaceCulling pullBackfaceCulling = new PullBackfaceCulling(pd);
+        // TODO 3. Depth sorting in VIEW SPACE
+        // PullDepthSorting pullDepthSorting = new PullDepthSorting(pd);
+        // PullPipe<Face> depthSortingPipe = new GenericPullPipe<>(pullBackfaceCulling);
+
+        // 4. Add coloring (space unimportant)
+        PullColoring pullColoring = new PullColoring(pd);
         PullPipe<Face> colorPipe = new GenericPullPipe<>(pullBackfaceCulling);
 
-        // TODO 3. perform depth sorting in VIEW SPACE
-
-        // TODO 4. add coloring (space unimportant)
-        PullColoring pullColoring = new PullColoring(pd);
-        PullPipe<Pair<Face, Color>> perspectivePipe = new GenericPullPipe<>(pullColoring);
-
         PullPerspectiveProjection pullPerspectiveProjection;
-        PullPipe<Pair<Face, Color>> screenPipe;
+        PullPipe<Pair<Face, Color>> perspectiveProjectionPipe;
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
-            // 4a. TODO perform lighting in VIEW SPACE
+            // 4a. Perform lighting in VIEW SPACE
             PullFlatShading pullFlatShading = new PullFlatShading(pd);
-            PullPipe<Pair<Face, Color>> flatShadingPipe = new GenericPullPipe<>(pullFlatShading);
+            PullPipe<Pair<Face, Color>> flatShadingPipe = new GenericPullPipe<>(pullColoring);
 
-            pullFlatShading.setPredecessor(perspectivePipe);
+            pullFlatShading.setPredecessor(flatShadingPipe);
 
-            // 5. TODO perform projection transformation on VIEW SPACE coordinates
+            // 5. Perform projection transformation on VIEW SPACE coordinates
             pullPerspectiveProjection = new PullPerspectiveProjection(pd);
-            screenPipe = new GenericPullPipe<>(pullPerspectiveProjection);
+            perspectiveProjectionPipe = new GenericPullPipe<>(pullFlatShading);
 
-            pullPerspectiveProjection.setPredecessor(flatShadingPipe);
+            pullPerspectiveProjection.setPredecessor(perspectiveProjectionPipe);
         } else {
-            // 5. TODO perform projection transformation
+            // 5. Perform projection transformation
             pullPerspectiveProjection = new PullPerspectiveProjection(pd);
-            screenPipe = new GenericPullPipe<>(pullPerspectiveProjection);
+            perspectiveProjectionPipe = new GenericPullPipe<>(pullColoring);
 
-            pullPerspectiveProjection.setPredecessor(perspectivePipe);
+            pullPerspectiveProjection.setPredecessor(perspectiveProjectionPipe);
+
         }
 
-        // TODO 6. perform perspective division to screen coordinates
+        // 6. Perform perspective division to screen coordinates
         PullScreenSpaceTransform pullScreenSpaceTransform = new PullScreenSpaceTransform(pd);
-        PullPipe<Pair<Face, Color>> sinkPullPipe = new GenericPullPipe<>(pullScreenSpaceTransform);
+        PullPipe<Pair<Face, Color>> screenPipe = new GenericPullPipe<>(pullPerspectiveProjection);
 
-        // TODO 7. feed into the sink (renderer)
+        // 7. Feed into the sink (renderer)
         PullModelSink pullModelSink = new PullModelSink(pd, pd.getGraphicsContext());
-
+        PullPipe<Pair<Face, Color>> sinkPullPipe = new GenericPullPipe<>(pullScreenSpaceTransform);
 
         pullModelViewTransformation.setPredecessor(modelViewPipe);
         pullBackfaceCulling.setPredecessor(cullingPipe);
+        // pullDepthSorting.setPredecessor(depthSortingPipe);
         pullColoring.setPredecessor(colorPipe);
         pullScreenSpaceTransform.setPredecessor(screenPipe);
         pullModelSink.setPredecessor(sinkPullPipe);
@@ -71,12 +74,12 @@ public class PullPipelineFactory {
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
         return new AnimationRenderer(pd) {
-            // TODO rotation variable goes in here
+            // Rotation variable
             private float rotationRadiantPerSecond = 1f;
             /** This method is called for every frame from the JavaFX Animation
-             * system (using an AnimationTimer, see AnimationRenderer). 
+             * system (using an AnimationTimer, see AnimationRenderer).
              * @param fraction the time which has passed since the last render call in a fraction of a second
-             * @param model    the model to render 
+             * @param model    the model to render
              */
             @Override
             protected void render(float fraction, Model model) {
@@ -87,7 +90,7 @@ public class PullPipelineFactory {
                 float rotationRadiant = pullModelViewTransformation.getRotation() + rotationRadiantPerSecond * fraction;
                 pullModelViewTransformation.setRotation(rotationRadiant);
 
-                // TODO trigger rendering of the pipeline
+                // Trigger rendering of the pipeline
                 pullModelSink.read();
 
                 // TODO create new model rotation matrix using pd.getModelRotAxis and Matrices.rotate
