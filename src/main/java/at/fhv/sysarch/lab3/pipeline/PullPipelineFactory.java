@@ -8,6 +8,7 @@ import at.fhv.sysarch.lab3.pipeline.pull.filter.*;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.GenericPullPipe;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import javafx.animation.AnimationTimer;
+import javafx.scene.paint.Color;
 
 public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
@@ -20,21 +21,34 @@ public class PullPipelineFactory {
         PullPipe<Face> cullingPipe = new GenericPullPipe<>(pullModelViewTransformation);
 
         // TODO 2. perform backface culling in VIEW SPACE
+        PullBackfaceCulling pullBackfaceCulling = new PullBackfaceCulling(pd);
+        PullPipe<Face> colorPipe = new GenericPullPipe<>(pullBackfaceCulling);
 
         // TODO 3. perform depth sorting in VIEW SPACE
 
         // TODO 4. add coloring (space unimportant)
+        PullColoring pullColoring = new PullColoring(pd);
+        PullPipe<Pair<Face, Color>> perspectivePipe = new GenericPullPipe<>(pullColoring);
+
+        PullPerspectiveProjection pullPerspectiveProjection;
+        PullPipe<Pair<Face, Color>> screenPipe;
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. TODO perform lighting in VIEW SPACE
             
             // 5. TODO perform projection transformation on VIEW SPACE coordinates
+            pullPerspectiveProjection = new PullPerspectiveProjection(pd);
+            screenPipe = new GenericPullPipe<>(pullPerspectiveProjection);
         } else {
             // 5. TODO perform projection transformation
+            pullPerspectiveProjection = new PullPerspectiveProjection(pd);
+            screenPipe = new GenericPullPipe<>(pullPerspectiveProjection);
         }
 
         // TODO 6. perform perspective division to screen coordinates
+        PullScreenSpaceTransform pullScreenSpaceTransform = new PullScreenSpaceTransform(pd);
+        PullPipe<Pair<Face, Color>> sinkPullPipe = new GenericPullPipe<>(pullScreenSpaceTransform);
 
         // TODO 7. feed into the sink (renderer)
         PullModelSink pullModelSink = new PullModelSink(pd, pd.getGraphicsContext());

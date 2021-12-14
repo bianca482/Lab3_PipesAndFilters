@@ -7,6 +7,7 @@ import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Matrices;
 import com.hackoeur.jglm.Vec4;
+import javafx.scene.paint.Color;
 
 public class PullModelViewTransformation implements PullFilter<Face> {
 
