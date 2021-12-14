@@ -16,11 +16,11 @@ Therefore, you simply need to calculate the normalised normal vector between the
 which you can obtain from PipelineData.getLightPos.
 With this normal you compute the dot product between the face normal.
  */
-public class FlatShading implements PushFilter<Pair<Face, Color>> {
+public class PushFlatShading implements PushFilter<Pair<Face, Color>> {
     private PipelineData pd;
     private PushPipe<Pair<Face, Color>> successor;
 
-    public FlatShading(PipelineData pd) {
+    public PushFlatShading(PipelineData pd) {
         this.pd = pd;
     }
 

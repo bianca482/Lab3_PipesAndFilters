@@ -4,7 +4,7 @@ import at.fhv.sysarch.lab3.obj.Face;
 
 import java.util.List;
 
-public class ModelSource implements PullFilter<Face> {
+public class PullModelSource implements PullFilter<Face> {
 
     public List<Face> data;
     int idx = -1;

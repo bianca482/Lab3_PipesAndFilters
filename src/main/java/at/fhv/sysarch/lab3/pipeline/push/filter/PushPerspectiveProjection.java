@@ -8,11 +8,11 @@ import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Vec4;
 import javafx.scene.paint.Color;
 
-public class PerspectiveProjection implements PushFilter<Pair<Face, Color>> {
+public class PushPerspectiveProjection implements PushFilter<Pair<Face, Color>> {
     private PipelineData pd;
     private PushPipe<Pair<Face, Color>> successor;
 
-    public PerspectiveProjection(PipelineData pd) {
+    public PushPerspectiveProjection(PipelineData pd) {
         this.pd = pd;
     }
 

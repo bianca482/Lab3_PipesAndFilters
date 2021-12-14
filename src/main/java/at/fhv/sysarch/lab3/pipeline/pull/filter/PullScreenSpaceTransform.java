@@ -1,24 +1,28 @@
-package at.fhv.sysarch.lab3.pipeline.push.filter;
+package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
-import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
+import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Vec4;
 import javafx.scene.paint.Color;
 
-public class ScreenSpaceTransform implements PushFilter<Pair<Face, Color>> {
+public class PullScreenSpaceTransform implements PullFilter<Pair<Face, Color>> {
     private PipelineData pd;
-    private PushPipe<Pair<Face, Color>> successor;
+    private PullPipe<Pair<Face, Color>> predecessor;
 
-    public ScreenSpaceTransform(PipelineData pd) {
+    public PullScreenSpaceTransform(PipelineData pd) {
         this.pd = pd;
     }
 
     @Override
-    public void write(Pair<Face, Color> input) {
+    public Pair<Face, Color> read(){
         Mat4 viewportTransform = pd.getViewportTransform();
+        Pair<Face, Color> input = predecessor.read();
+        if (input == null){
+            return null;
+        }
 
         Face face = input.fst();
 
@@ -46,10 +50,10 @@ public class ScreenSpaceTransform implements PushFilter<Pair<Face, Color>> {
 
         Pair<Face, Color> newInput = new Pair<>(new Face(v1Trans, v2Trans, v3Trans, face.getN1(), face.getN2(), face.getN3()), input.snd());
 
-        successor.write(newInput);
+        return newInput;
     }
 
-    public void setSuccessor(PushPipe<Pair<Face, Color>> successor) {
-        this.successor = successor;
+    public void setPredecessor(PullPipe<Pair<Face, Color>> predecessor) {
+        this.predecessor = predecessor;
     }
 }

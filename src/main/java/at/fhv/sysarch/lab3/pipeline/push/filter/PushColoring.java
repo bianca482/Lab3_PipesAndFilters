@@ -6,12 +6,12 @@ import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import javafx.scene.paint.Color;
 
-public class Coloring implements PushFilter<Face> {
+public class PushColoring implements PushFilter<Face> {
 
     private final PipelineData pd;
     private PushPipe<Pair<Face, Color>> successor;
 
-    public Coloring(PipelineData pd) {
+    public PushColoring(PipelineData pd) {
         this.pd = pd;
     }
 

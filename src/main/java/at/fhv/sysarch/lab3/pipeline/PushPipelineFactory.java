@@ -14,62 +14,62 @@ import java.util.List;
 public class PushPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // Push from the source (model)
-        ModelSource source = new ModelSource();
+        PushModelSource source = new PushModelSource();
 
         // 1. Perform model-view transformation from model to VIEW SPACE coordinates
-        ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd);
-        PushPipe<List<Face>> modelPushPipe = new GenericPushPipe<>(modelViewTransformation);
+        PushModelViewTransformation pushModelViewTransformation = new PushModelViewTransformation(pd);
+        PushPipe<List<Face>> modelPushPipe = new GenericPushPipe<>(pushModelViewTransformation);
 
         // 2. Backface culling in VIEW SPACE
-        BackfaceCulling backfaceCulling = new BackfaceCulling(pd);
-        PushPipe<List<Face>> cullingPushPipe = new GenericPushPipe<>(backfaceCulling);
+        PushBackfaceCulling pushBackfaceCulling = new PushBackfaceCulling(pd);
+        PushPipe<List<Face>> cullingPushPipe = new GenericPushPipe<>(pushBackfaceCulling);
 
         // 3. perform depth sorting in VIEW SPACE
-        DepthSorting depthSorting = new DepthSorting(pd);
-        PushPipe<List<Face>> sortingPushPipe = new GenericPushPipe<>(depthSorting);
+        PushDepthSorting pushDepthSorting = new PushDepthSorting(pd);
+        PushPipe<List<Face>> sortingPushPipe = new GenericPushPipe<>(pushDepthSorting);
 
         // 4. Add coloring (space unimportant)
-        Coloring coloring = new Coloring(pd);
-        PushPipe<Face> colorPushPipe = new GenericPushPipe<>(coloring);
+        PushColoring pushColoring = new PushColoring(pd);
+        PushPipe<Face> colorPushPipe = new GenericPushPipe<>(pushColoring);
 
-        PerspectiveProjection perspectiveProjection;
+        PushPerspectiveProjection pushPerspectiveProjection;
         PushPipe<Pair<Face, Color>> perspectivePushPipe;
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. Perform lighting in VIEW SPACE
-            FlatShading flatShading = new FlatShading(pd);
-            PushPipe<Pair<Face, Color>> shadingPushPipe = new GenericPushPipe<>(flatShading);
+            PushFlatShading pushFlatShading = new PushFlatShading(pd);
+            PushPipe<Pair<Face, Color>> shadingPushPipe = new GenericPushPipe<>(pushFlatShading);
 
-            coloring.setSuccessor(shadingPushPipe);
+            pushColoring.setSuccessor(shadingPushPipe);
 
             // 5. Perform projection transformation on VIEW SPACE coordinates
-            perspectiveProjection = new PerspectiveProjection(pd);
-            perspectivePushPipe = new GenericPushPipe<>(perspectiveProjection);
+            pushPerspectiveProjection = new PushPerspectiveProjection(pd);
+            perspectivePushPipe = new GenericPushPipe<>(pushPerspectiveProjection);
 
-            flatShading.setSuccessor(perspectivePushPipe);
+            pushFlatShading.setSuccessor(perspectivePushPipe);
         } else {
             // 5. Perform projection transformation
-            perspectiveProjection = new PerspectiveProjection(pd);
-            perspectivePushPipe = new GenericPushPipe<>(perspectiveProjection);
+            pushPerspectiveProjection = new PushPerspectiveProjection(pd);
+            perspectivePushPipe = new GenericPushPipe<>(pushPerspectiveProjection);
 
-            coloring.setSuccessor(perspectivePushPipe);
+            pushColoring.setSuccessor(perspectivePushPipe);
         }
 
         // Perform perspective division to screen coordinates
-        ScreenSpaceTransform screenSpaceTransform = new ScreenSpaceTransform(pd);
-        PushPipe<Pair<Face, Color>> screenSpacePushPipe = new GenericPushPipe<>(screenSpaceTransform);
+        PushScreenSpaceTransform pushScreenSpaceTransform = new PushScreenSpaceTransform(pd);
+        PushPipe<Pair<Face, Color>> screenSpacePushPipe = new GenericPushPipe<>(pushScreenSpaceTransform);
 
         // Feed into the sink (renderer)
-        PushFilter<Pair<Face, Color>> sink = new ModelSink(pd, pd.getGraphicsContext());
+        PushFilter<Pair<Face, Color>> sink = new PushModelSink(pd, pd.getGraphicsContext());
         PushPipe<Pair<Face, Color>> sinkPushPipe = new GenericPushPipe<>(sink);
 
         source.setSuccessor(modelPushPipe);
-        modelViewTransformation.setSuccessor(cullingPushPipe);
-        backfaceCulling.setSuccessor(sortingPushPipe);
-        depthSorting.setSuccessor(colorPushPipe);
-        perspectiveProjection.setSuccessor(screenSpacePushPipe);
-        screenSpaceTransform.setSuccessor(sinkPushPipe);
+        pushModelViewTransformation.setSuccessor(cullingPushPipe);
+        pushBackfaceCulling.setSuccessor(sortingPushPipe);
+        pushDepthSorting.setSuccessor(colorPushPipe);
+        pushPerspectiveProjection.setSuccessor(screenSpacePushPipe);
+        pushScreenSpaceTransform.setSuccessor(sinkPushPipe);
 
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
@@ -85,8 +85,8 @@ public class PushPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
                 // Compute rotation in radians
-                float rotationRadiant = modelViewTransformation.getRotation() + rotationRadiantPerSecond * fraction;
-                modelViewTransformation.setRotation(rotationRadiant);
+                float rotationRadiant = pushModelViewTransformation.getRotation() + rotationRadiantPerSecond * fraction;
+                pushModelViewTransformation.setRotation(rotationRadiant);
 
                 // Trigger rendering of the pipeline
                 source.write(model.getFaces());

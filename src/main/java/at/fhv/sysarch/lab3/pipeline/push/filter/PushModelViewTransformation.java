@@ -10,13 +10,13 @@ import com.hackoeur.jglm.Vec4;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ModelViewTransformation implements PushFilter<List<Face>> {
+public class PushModelViewTransformation implements PushFilter<List<Face>> {
 
     private final PipelineData pd;
     private PushPipe<List<Face>> successor;
     private float rotation;
 
-    public ModelViewTransformation(PipelineData pd) {
+    public PushModelViewTransformation(PipelineData pd) {
         this.pd = pd;
     }
 

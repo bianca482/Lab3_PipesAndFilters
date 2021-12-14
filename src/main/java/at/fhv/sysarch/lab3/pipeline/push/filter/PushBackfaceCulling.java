@@ -8,13 +8,13 @@ import com.hackoeur.jglm.Vec3;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BackfaceCulling implements PushFilter<List<Face>> {
+public class PushBackfaceCulling implements PushFilter<List<Face>> {
 
     private PushPipe<List<Face>> successor;
     private PipelineData pd;
     private Vec3 viewingDirVector;
 
-    public BackfaceCulling(PipelineData pd) {
+    public PushBackfaceCulling(PipelineData pd) {
         this.pd = pd;
         this.viewingDirVector = pd.getViewingCenter().subtract(pd.getViewingEye());
         // viewing Center = Zu diesem Punkt schaut die Kamera

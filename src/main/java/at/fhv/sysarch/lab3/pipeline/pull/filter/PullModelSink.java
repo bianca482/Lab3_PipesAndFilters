@@ -10,18 +10,13 @@ import com.hackoeur.jglm.Vec4;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class ModelSink {
+public class PullModelSink {
 
     private final GraphicsContext context;
     private PipelineData pd;
-
-    public void setPredecessor(PullPipe<Pair<Face, Color>> predecessor) {
-        this.predecessor = predecessor;
-    }
-
     private PullPipe<Pair<Face, Color>> predecessor;
 
-    public ModelSink(PipelineData pd, GraphicsContext context) {
+    public PullModelSink(PipelineData pd, GraphicsContext context) {
         this.context = context;
         this.pd = pd;
     }
@@ -68,5 +63,9 @@ public class ModelSink {
                 }
             }
         }
+    }
+
+    public void setPredecessor(PullPipe<Pair<Face, Color>> predecessor) {
+        this.predecessor = predecessor;
     }
 }

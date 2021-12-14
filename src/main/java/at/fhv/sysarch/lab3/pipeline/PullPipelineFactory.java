@@ -3,8 +3,8 @@ package at.fhv.sysarch.lab3.pipeline;
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
-import at.fhv.sysarch.lab3.pipeline.pull.filter.ModelSource;
-import at.fhv.sysarch.lab3.pipeline.pull.filter.ModelViewTransformation;
+import at.fhv.sysarch.lab3.pipeline.data.Pair;
+import at.fhv.sysarch.lab3.pipeline.pull.filter.*;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.GenericPullPipe;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import javafx.animation.AnimationTimer;
@@ -12,11 +12,12 @@ import javafx.animation.AnimationTimer;
 public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // Pull from the source (model)
-        ModelSource modelSource = new ModelSource();
+        PullModelSource pullModelSource = new PullModelSource();
+        PullPipe<Face> modelViewPipe = new GenericPullPipe<>(pullModelSource);
 
         // 1. Perform model-view transformation from model to VIEW SPACE coordinates
-        ModelViewTransformation modelViewTransformation = new ModelViewTransformation(pd);
-        PullPipe<Face> modelViewPipe = new GenericPullPipe<>(modelSource);
+        PullModelViewTransformation pullModelViewTransformation = new PullModelViewTransformation(pd);
+        PullPipe<Face> cullingPipe = new GenericPullPipe<>(pullModelViewTransformation);
 
         // TODO 2. perform backface culling in VIEW SPACE
 
@@ -36,14 +37,21 @@ public class PullPipelineFactory {
         // TODO 6. perform perspective division to screen coordinates
 
         // TODO 7. feed into the sink (renderer)
+        PullModelSink pullModelSink = new PullModelSink(pd, pd.getGraphicsContext());
 
-        modelViewTransformation.setPredecessor(modelViewPipe);
+
+        pullModelViewTransformation.setPredecessor(modelViewPipe);
+        pullBackfaceCulling.setPredecessor(cullingPipe);
+        pullColoring.setPredecessor(colorPipe);
+        pullPerspectiveProjection.setPredecessor(perspectivePipe);
+        pullScreenSpaceTransform.setPredecessor(screenPipe);
+        pullModelSink.setPredecessor(sinkPullPipe);
 
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
         return new AnimationRenderer(pd) {
             // TODO rotation variable goes in here
-
+            private float rotationRadiantPerSecond = 1f;
             /** This method is called for every frame from the JavaFX Animation
              * system (using an AnimationTimer, see AnimationRenderer). 
              * @param fraction the time which has passed since the last render call in a fraction of a second
@@ -52,9 +60,14 @@ public class PullPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
                 // Wenn Rendering aufgerufen wird, Faces für modelSource updaten
-                modelSource.UpdateData(model.getFaces());
+                pullModelSource.UpdateData(model.getFaces());
 
-                // TODO compute rotation in radians
+                // Compute rotation in radians
+                float rotationRadiant = pullModelViewTransformation.getRotation() + rotationRadiantPerSecond * fraction;
+                pullModelViewTransformation.setRotation(rotationRadiant);
+
+                // TODO trigger rendering of the pipeline
+                pullModelSink.read();
 
                 // TODO create new model rotation matrix using pd.getModelRotAxis and Matrices.rotate
 
@@ -62,7 +75,7 @@ public class PullPipelineFactory {
 
                 // TODO update model-view filter
 
-                // TODO trigger rendering of the pipeline
+
             }
         };
     }

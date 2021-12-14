@@ -9,12 +9,12 @@ import com.hackoeur.jglm.Vec4;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class ModelSink implements PushFilter<Pair<Face, Color>> {
+public class PushModelSink implements PushFilter<Pair<Face, Color>> {
 
     private final GraphicsContext context;
     private PipelineData pd;
 
-    public ModelSink(PipelineData pd, GraphicsContext context) {
+    public PushModelSink(PipelineData pd, GraphicsContext context) {
         this.context = context;
         this.pd = pd;
     }

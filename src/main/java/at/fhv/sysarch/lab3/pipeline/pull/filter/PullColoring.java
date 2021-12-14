@@ -6,12 +6,12 @@ import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import javafx.scene.paint.Color;
 
-public class Coloring implements PullFilter<Pair<Face, Color>> {
+public class PullColoring implements PullFilter<Pair<Face, Color>> {
 
     private final PipelineData pd;
     private PullPipe<Face> predecessor;
 
-    public Coloring(PipelineData pd) {
+    public PullColoring(PipelineData pd) {
         this.pd = pd;
     }
 

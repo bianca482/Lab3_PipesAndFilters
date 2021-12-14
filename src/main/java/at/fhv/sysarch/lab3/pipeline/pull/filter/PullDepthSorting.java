@@ -2,11 +2,9 @@ package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
 
-import java.util.List;
-
-public class BackfaceCulling implements PullFilter<List<Face>> {
+public class PullDepthSorting implements PullFilter<Face> {
     @Override
-    public List<Face> read() {
+    public Face read() {
         return null;
     }
 }

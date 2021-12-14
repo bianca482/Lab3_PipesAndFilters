@@ -2,18 +2,19 @@ package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
+import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Matrices;
 import com.hackoeur.jglm.Vec4;
 
-public class ModelViewTransformation implements PullFilter<Face> {
+public class PullModelViewTransformation implements PullFilter<Face> {
 
     private final PipelineData pd;
     private PullPipe<Face> predecessor;
     private float rotation;
 
-    public ModelViewTransformation(PipelineData pd) {
+    public PullModelViewTransformation(PipelineData pd) {
         this.pd = pd;
     }
 

@@ -5,7 +5,7 @@ import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 
 import java.util.List;
 
-public class ModelSource implements PushFilter<List<Face>> {
+public class PushModelSource implements PushFilter<List<Face>> {
 
     private PushPipe<List<Face>> successor;
 
