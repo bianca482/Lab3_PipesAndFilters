@@ -24,12 +24,12 @@ public class PullPipelineFactory {
         PullPipe<Face> cullingPipe = new GenericPullPipe<>(pullModelViewTransformation);
 
         // TODO 3. Depth sorting in VIEW SPACE
-        // PullDepthSorting pullDepthSorting = new PullDepthSorting(pd);
-        // PullPipe<Face> depthSortingPipe = new GenericPullPipe<>(pullBackfaceCulling);
+        PullDepthSorting pullDepthSorting = new PullDepthSorting(pd);
+        PullPipe<Face> depthSortingPipe = new GenericPullPipe<>(pullBackfaceCulling);
 
         // 4. Add coloring (space unimportant)
         PullColoring pullColoring = new PullColoring(pd);
-        PullPipe<Face> colorPipe = new GenericPullPipe<>(pullBackfaceCulling);
+        PullPipe<Face> colorPipe = new GenericPullPipe<>(pullDepthSorting);
 
         PullPerspectiveProjection pullPerspectiveProjection;
         PullPipe<Pair<Face, Color>> perspectiveProjectionPipe;
@@ -66,7 +66,7 @@ public class PullPipelineFactory {
 
         pullModelViewTransformation.setPredecessor(modelViewPipe);
         pullBackfaceCulling.setPredecessor(cullingPipe);
-        // pullDepthSorting.setPredecessor(depthSortingPipe);
+        pullDepthSorting.setPredecessor(depthSortingPipe);
         pullColoring.setPredecessor(colorPipe);
         pullScreenSpaceTransform.setPredecessor(screenPipe);
         pullModelSink.setPredecessor(sinkPullPipe);
