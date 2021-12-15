@@ -20,23 +20,26 @@ public class PullDepthSorting implements PullFilter<Face> {
 
     private PullPipe<Face> predecessor;
     private PipelineData pd;
+    private List<Pair<Float,Face>> faceList;
 
     public PullDepthSorting(PipelineData pd) {
         this.pd = pd;
+        faceList = new LinkedList<>();
     }
 
     @Override
     public Face read() {
-        List<Face> allFaces = new LinkedList<>();
+        if (faceList.size() > 0) {
+            return faceList.remove(0).snd();
+        }
 
+        List<Face> allFaces = new LinkedList<>();
         Face nextFace = predecessor.read();
 
         while (nextFace != null) {
             allFaces.add(nextFace);
             nextFace = predecessor.read();
         }
-
-        List<Pair<Float,Face>> faceList = new LinkedList<>();
 
         // Painter's algorithm
         // 1. Find the average depth of each face
@@ -64,9 +67,11 @@ public class PullDepthSorting implements PullFilter<Face> {
 
         // 3. Draw the furthest surfaces away
         // Schreibe einzelne Faces mit absteigendem Abstand in nächste Pipe, damit diese dann gezeichnet werden können.
-        for (Pair<Float, Face> floatFacePair : faceList) {
-            return floatFacePair.snd();
+
+        if (faceList.size() > 0) {
+            return faceList.remove(0).snd();
         }
+
         return null;
     }
 
