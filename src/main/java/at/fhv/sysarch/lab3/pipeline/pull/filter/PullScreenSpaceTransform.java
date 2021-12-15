@@ -1,7 +1,6 @@
 package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Mat4;
@@ -9,17 +8,17 @@ import com.hackoeur.jglm.Vec4;
 import javafx.scene.paint.Color;
 
 public class PullScreenSpaceTransform implements PullFilter<Pair<Face, Color>> {
-    private PipelineData pd;
+    private final Mat4 viewportTransform;
     private PullPipe<Pair<Face, Color>> predecessor;
 
-    public PullScreenSpaceTransform(PipelineData pd) {
-        this.pd = pd;
+    public PullScreenSpaceTransform(Mat4 viewportTransform) {
+        this.viewportTransform = viewportTransform;
     }
 
     @Override
     public Pair<Face, Color> read(){
-        Mat4 viewportTransform = pd.getViewportTransform();
         Pair<Face, Color> input = predecessor.read();
+
         if (input == null){
             return null;
         }
@@ -33,7 +32,7 @@ public class PullScreenSpaceTransform implements PullFilter<Pair<Face, Color>> {
 
         float dividedV2X = face.getV2().getX() / face.getV2().getW();
         float dividedV2Y = face.getV2().getY() / face.getV2().getW();
-        float dividedV2Z = input.fst().getV2().getZ() / input.fst().getV2().getW();
+        float dividedV2Z = face.getV2().getZ() / face.getV2().getW();
 
         float dividedV3X = face.getV3().getX() / face.getV3().getW();
         float dividedV3Y = face.getV3().getY() / face.getV3().getW();
@@ -48,9 +47,7 @@ public class PullScreenSpaceTransform implements PullFilter<Pair<Face, Color>> {
         Vec4 v2Trans = viewportTransform.multiply(newVector2);
         Vec4 v3Trans = viewportTransform.multiply(newVector3);
 
-        Pair<Face, Color> newInput = new Pair<>(new Face(v1Trans, v2Trans, v3Trans, face.getN1(), face.getN2(), face.getN3()), input.snd());
-
-        return newInput;
+        return new Pair<>(new Face(v1Trans, v2Trans, v3Trans, face.getN1(), face.getN2(), face.getN3()), input.snd());
     }
 
     public void setPredecessor(PullPipe<Pair<Face, Color>> predecessor) {

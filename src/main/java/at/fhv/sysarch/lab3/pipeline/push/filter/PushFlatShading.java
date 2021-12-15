@@ -17,33 +17,32 @@ which you can obtain from PipelineData.getLightPos.
 With this normal you compute the dot product between the face normal.
  */
 public class PushFlatShading implements PushFilter<Pair<Face, Color>> {
-    private PipelineData pd;
+    private Vec3 lightPos;
     private PushPipe<Pair<Face, Color>> successor;
 
-    public PushFlatShading(PipelineData pd) {
-        this.pd = pd;
+    public PushFlatShading(Vec3 lightPos) {
+        this.lightPos = lightPos;
     }
 
     @Override
     public void write(Pair<Face, Color> pair) {
-
         Face input = pair.fst();
 
         // Normalvektor berechnen: Anteile aus 4 dimensionalem Vektor in 3 dimensionalem Vektor speichern
-        Vec3 normalVector = new Vec3(input.getN1().getX(), input.getN1().getY(), input.getN1().getZ());
+        Vec3 normalVector = input.getN1().toVec3();
 
         // Vierdimensionaler Vektor in drei dimensionalem Vektor speichern
         Vec3 vertexV3 = input.getV1().toVec3();
 
         // Richtungsvektor berechnen
-        Vec3 directionVector = pd.getLightPos().subtract(vertexV3);
+        Vec3 directionVector = lightPos.subtract(vertexV3);
 
         // Kosinus Wert für den Winkel zwischen Normalvektor und Richtungsvektor berechnen
-        double cosAlpha = (directionVector.dot(normalVector)) / (directionVector.getLength() * normalVector.getLength());
+        double brightness = (directionVector.dot(normalVector)) / (directionVector.getLength() * normalVector.getLength());
 
-        // Geht der Kosinus Wert gegen 0, scheint das Licht senkrecht auf die Fläche, und die Fläche sollte maximale Helligkeit haben
+        // Geht der Kosinus Wert (= brightness) gegen 0, scheint das Licht senkrecht auf die Fläche, und die Fläche sollte maximale Helligkeit haben
         // Anpassen der Farbhelligkeit
-        Color color = Color.BLACK.interpolate(pair.snd(), cosAlpha);
+        Color color = Color.BLACK.interpolate(pair.snd(), brightness);
 
         successor.write(new Pair<>(input, color));
     }

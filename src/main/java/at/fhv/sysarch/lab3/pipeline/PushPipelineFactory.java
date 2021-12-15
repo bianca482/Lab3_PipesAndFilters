@@ -21,15 +21,15 @@ public class PushPipelineFactory {
         PushPipe<List<Face>> modelPushPipe = new GenericPushPipe<>(pushModelViewTransformation);
 
         // 2. Backface culling in VIEW SPACE
-        PushBackfaceCulling pushBackfaceCulling = new PushBackfaceCulling(pd);
+        PushBackfaceCulling pushBackfaceCulling = new PushBackfaceCulling(pd.getViewingCenter(), pd.getViewingEye());
         PushPipe<List<Face>> cullingPushPipe = new GenericPushPipe<>(pushBackfaceCulling);
 
         // 3. perform depth sorting in VIEW SPACE
-        PushDepthSorting pushDepthSorting = new PushDepthSorting(pd);
+        PushDepthSorting pushDepthSorting = new PushDepthSorting(pd.getViewingEye());
         PushPipe<List<Face>> sortingPushPipe = new GenericPushPipe<>(pushDepthSorting);
 
         // 4. Add coloring (space unimportant)
-        PushColoring pushColoring = new PushColoring(pd);
+        PushColoring pushColoring = new PushColoring(pd.getModelColor());
         PushPipe<Face> colorPushPipe = new GenericPushPipe<>(pushColoring);
 
         PushPerspectiveProjection pushPerspectiveProjection;
@@ -38,30 +38,30 @@ public class PushPipelineFactory {
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. Perform lighting in VIEW SPACE
-            PushFlatShading pushFlatShading = new PushFlatShading(pd);
+            PushFlatShading pushFlatShading = new PushFlatShading(pd.getLightPos());
             PushPipe<Pair<Face, Color>> shadingPushPipe = new GenericPushPipe<>(pushFlatShading);
 
             pushColoring.setSuccessor(shadingPushPipe);
 
             // 5. Perform projection transformation on VIEW SPACE coordinates
-            pushPerspectiveProjection = new PushPerspectiveProjection(pd);
+            pushPerspectiveProjection = new PushPerspectiveProjection(pd.getProjTransform());
             perspectivePushPipe = new GenericPushPipe<>(pushPerspectiveProjection);
 
             pushFlatShading.setSuccessor(perspectivePushPipe);
         } else {
             // 5. Perform projection transformation
-            pushPerspectiveProjection = new PushPerspectiveProjection(pd);
+            pushPerspectiveProjection = new PushPerspectiveProjection(pd.getProjTransform());
             perspectivePushPipe = new GenericPushPipe<>(pushPerspectiveProjection);
 
             pushColoring.setSuccessor(perspectivePushPipe);
         }
 
         // Perform perspective division to screen coordinates
-        PushScreenSpaceTransform pushScreenSpaceTransform = new PushScreenSpaceTransform(pd);
+        PushScreenSpaceTransform pushScreenSpaceTransform = new PushScreenSpaceTransform(pd.getViewportTransform());
         PushPipe<Pair<Face, Color>> screenSpacePushPipe = new GenericPushPipe<>(pushScreenSpaceTransform);
 
         // Feed into the sink (renderer)
-        PushFilter<Pair<Face, Color>> sink = new PushModelSink(pd, pd.getGraphicsContext());
+        PushFilter<Pair<Face, Color>> sink = new PushModelSink(pd.getRenderingMode(), pd.getGraphicsContext());
         PushPipe<Pair<Face, Color>> sinkPushPipe = new GenericPushPipe<>(sink);
 
         source.setSuccessor(modelPushPipe);

@@ -1,25 +1,23 @@
 package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import javafx.scene.paint.Color;
 
 public class PullColoring implements PullFilter<Pair<Face, Color>> {
 
-    private final PipelineData pd;
+    private final Color modelColor;
     private PullPipe<Face> predecessor;
 
-    public PullColoring(PipelineData pd) {
-        this.pd = pd;
+    public PullColoring(Color modelColor) {
+        this.modelColor = modelColor;
     }
 
     @Override
     public Pair<Face, Color> read() {
-        Color modelColor = pd.getModelColor();
-
         Face input = predecessor.read();
+
         if (input == null) {
             return null;
         }
@@ -31,9 +29,7 @@ public class PullColoring implements PullFilter<Pair<Face, Color>> {
 
         Color color = new Color(r, g, b, 1.0);
 
-        Pair<Face, Color> faceColorPair = new Pair<>(input, color);
-
-        return faceColorPair;
+        return new Pair<>(input, color);
     }
 
     public void setPredecessor(PullPipe<Face> predecessor) {

@@ -18,12 +18,12 @@ You need a single z value of each face, for sorting purposes, therefore compute 
 
 public class PushDepthSorting implements PushFilter<List<Face>> {
 
-    public PushDepthSorting(PipelineData pd) {
-        this.pd = pd;
-    }
-
     private PushPipe<Face> successor;
-    private PipelineData pd;
+    private final Vec3 viewingEye;
+
+    public PushDepthSorting(Vec3 viewingEye) {
+        this.viewingEye = viewingEye;
+    }
 
     @Override
     public void write(List<Face> faces) {
@@ -38,9 +38,9 @@ public class PushDepthSorting implements PushFilter<List<Face>> {
             Vec3 vertex3 = input.getV3().toVec3();
 
             // Berechne Abstand von Camera zu den jeweiligen 3 Eckpunkten des Dreiecks (Face)
-            float z1 = vertex1.subtract(pd.getViewingEye()).getLength();
-            float z2 = vertex2.subtract(pd.getViewingEye()).getLength();
-            float z3 = vertex3.subtract(pd.getViewingEye()).getLength();
+            float z1 = vertex1.subtract(viewingEye).getLength();
+            float z2 = vertex2.subtract(viewingEye).getLength();
+            float z3 = vertex3.subtract(viewingEye).getLength();
 
             // Berechne durchschnittlichen Abstand
             float z = (z1+z2+z3)/3;
@@ -58,7 +58,6 @@ public class PushDepthSorting implements PushFilter<List<Face>> {
         for (Pair<Float, Face> floatFacePair : faceList) {
             successor.write(floatFacePair.snd());
         }
-
     }
 
     public void setSuccessor (PushPipe< Face > successor) {

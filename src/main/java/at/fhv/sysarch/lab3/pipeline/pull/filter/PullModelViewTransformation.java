@@ -2,12 +2,10 @@ package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.PipelineData;
-import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Matrices;
 import com.hackoeur.jglm.Vec4;
-import javafx.scene.paint.Color;
 
 public class PullModelViewTransformation implements PullFilter<Face> {
 
@@ -22,6 +20,7 @@ public class PullModelViewTransformation implements PullFilter<Face> {
     @Override
     public Face read() {
         Face face = predecessor.read();
+
         if (face == null) {
             return null;
         }
@@ -42,9 +41,7 @@ public class PullModelViewTransformation implements PullFilter<Face> {
         Vec4 n2Trans = viewTransform.multiply(face.getN2());
         Vec4 n3Trans = viewTransform.multiply(face.getN3());
 
-        face = new Face(v1Trans, v2Trans, v3Trans, n1Trans, n2Trans, n3Trans);
-
-        return face;
+        return new Face(v1Trans, v2Trans, v3Trans, n1Trans, n2Trans, n3Trans);
     }
 
     public void setRotation(float rotation) {

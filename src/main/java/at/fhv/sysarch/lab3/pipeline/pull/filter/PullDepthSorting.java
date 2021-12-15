@@ -1,7 +1,6 @@
 package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Vec3;
@@ -19,11 +18,11 @@ You need a single z value of each face, for sorting purposes, therefore compute 
 public class PullDepthSorting implements PullFilter<Face> {
 
     private PullPipe<Face> predecessor;
-    private PipelineData pd;
+    private final Vec3 viewingEye;
     private List<Pair<Float,Face>> faceList;
 
-    public PullDepthSorting(PipelineData pd) {
-        this.pd = pd;
+    public PullDepthSorting(Vec3 viewingEye) {
+        this.viewingEye = viewingEye;
         faceList = new LinkedList<>();
     }
 
@@ -50,9 +49,9 @@ public class PullDepthSorting implements PullFilter<Face> {
             Vec3 vertex3 = input.getV3().toVec3();
 
             // Berechne Abstand von Camera zu den jeweiligen 3 Eckpunkten des Dreiecks (Face)
-            float z1 = vertex1.subtract(pd.getViewingEye()).getLength();
-            float z2 = vertex2.subtract(pd.getViewingEye()).getLength();
-            float z3 = vertex3.subtract(pd.getViewingEye()).getLength();
+            float z1 = vertex1.subtract(viewingEye).getLength();
+            float z2 = vertex2.subtract(viewingEye).getLength();
+            float z3 = vertex3.subtract(viewingEye).getLength();
 
             // Berechne durchschnittlichen Abstand
             float z = (z1+z2+z3)/3;

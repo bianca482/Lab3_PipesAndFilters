@@ -1,35 +1,27 @@
 package at.fhv.sysarch.lab3.pipeline.push.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import com.hackoeur.jglm.Vec2;
-import com.hackoeur.jglm.Vec4;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class PushModelSink implements PushFilter<Pair<Face, Color>> {
 
     private final GraphicsContext context;
-    private PipelineData pd;
+    private RenderingMode renderingMode;
 
-    public PushModelSink(PipelineData pd, GraphicsContext context) {
+    public PushModelSink(RenderingMode renderingMode, GraphicsContext context) {
         this.context = context;
-        this.pd = pd;
+        this.renderingMode = renderingMode;
     }
 
     @Override
     public void write(Pair<Face, Color> faceColorPair) {
-        Vec4 v1Trans = faceColorPair.fst().getV1();
-        Vec4 v2Trans = faceColorPair.fst().getV2();
-        Vec4 v3Trans = faceColorPair.fst().getV3();
-
-        Vec2 v1Screen = v1Trans.toScreen();
-        Vec2 v2Screen = v2Trans.toScreen();
-        Vec2 v3Screen = v3Trans.toScreen();
-
-        RenderingMode renderingMode = pd.getRenderingMode();
+        Vec2 v1Trans = faceColorPair.fst().getV1().toScreen();
+        Vec2 v2Trans = faceColorPair.fst().getV2().toScreen();
+        Vec2 v3Trans = faceColorPair.fst().getV3().toScreen();
 
         if (renderingMode.equals(RenderingMode.POINT)) {
             context.setFill(faceColorPair.snd());
@@ -40,15 +32,15 @@ public class PushModelSink implements PushFilter<Pair<Face, Color>> {
         } else if (renderingMode.equals(RenderingMode.WIREFRAME)) {
             context.setStroke(faceColorPair.snd());
 
-            context.strokePolygon(new double[]{v1Screen.getX(), v2Screen.getX(), v3Screen.getX()}, new double[]{v1Screen.getY(), v2Screen.getY(), v3Screen.getY()}, 3);
+            context.strokePolygon(new double[]{v1Trans.getX(), v2Trans.getX(), v3Trans.getX()}, new double[]{v1Trans.getY(), v2Trans.getY(), v3Trans.getY()}, 3);
         } else if (renderingMode.equals(RenderingMode.FILLED)) {
             context.setFill(faceColorPair.snd());
 
-            context.fillPolygon(new double[]{v1Screen.getX(), v2Screen.getX(), v3Screen.getX()}, new double[]{v1Screen.getY(), v2Screen.getY(), v3Screen.getY()}, 3);
+            context.fillPolygon(new double[]{v1Trans.getX(), v2Trans.getX(), v3Trans.getX()}, new double[]{v1Trans.getY(), v2Trans.getY(), v3Trans.getY()}, 3);
 
             //Damit die Linien auch eingefärbt werden
             context.setStroke(faceColorPair.snd());
-            context.strokePolygon(new double[]{v1Screen.getX(), v2Screen.getX(), v3Screen.getX()}, new double[]{v1Screen.getY(), v2Screen.getY(), v3Screen.getY()}, 3);
+            context.strokePolygon(new double[]{v1Trans.getX(), v2Trans.getX(), v3Trans.getX()}, new double[]{v1Trans.getY(), v2Trans.getY(), v3Trans.getY()}, 3);
         }
     }
 }

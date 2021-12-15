@@ -18,11 +18,11 @@ With this normal you compute the dot product between the face normal.
  */
 
 public class PullFlatShading implements PullFilter<Pair<Face, Color>> {
-    private PipelineData pd;
+    private final Vec3 lightPos;
     private PullPipe<Pair<Face, Color>> predecessor;
 
-    public PullFlatShading(PipelineData pd) {
-        this.pd = pd;
+    public PullFlatShading(Vec3 lightPos) {
+        this.lightPos = lightPos;
     }
 
     @Override
@@ -37,13 +37,13 @@ public class PullFlatShading implements PullFilter<Pair<Face, Color>> {
         Face input = pair.fst();
 
         // Normalvektor berechnen: Anteile aus 4 dimensionalem Vektor in 3 dimensionalem Vektor speichern
-        Vec3 normalVector = new Vec3(input.getN1().getX(), input.getN1().getY(), input.getN1().getZ());
+        Vec3 normalVector = input.getN1().toVec3();
 
         // Vierdimensionaler Vektor in drei dimensionalem Vektor speichern
         Vec3 vertexV3 = input.getV1().toVec3();
 
         // Richtungsvektor berechnen
-        Vec3 directionVector = pd.getLightPos().subtract(vertexV3);
+        Vec3 directionVector = lightPos.subtract(vertexV3);
 
         // Kosinus Wert für den Winkel zwischen Normalvektor und Richtungsvektor berechnen
         double cosAlpha = (directionVector.dot(normalVector)) / (directionVector.getLength() * normalVector.getLength());

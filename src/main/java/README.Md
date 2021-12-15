@@ -6,3 +6,12 @@ In general: DON'T DO THIS. However, this is a good reason for doing it.
 Also I added / cleaned up functionality:
 - added Vec2
 - Removed warnings due to deprecated Java API usage in JglmConfig and Precision
+
+
+- In Main Push oder Pull auswählen
+- Architektur erklären (von Push & Pull Pipeline) -> 
+  - Funktionsweise, 
+  - welche Interfaces, 
+  - Verschachtelung (müssen Nachfolger oder Vorgänger angegeben werden müssen)
+- Screenshot beider Pipelines
+- Erstellung Rotationsmatrix bei uns in ModelView Filter, nicht in render() von PipelineFactory

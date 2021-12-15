@@ -1,7 +1,6 @@
 package at.fhv.sysarch.lab3.pipeline.push.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import com.hackoeur.jglm.Mat4;
@@ -9,17 +8,15 @@ import com.hackoeur.jglm.Vec4;
 import javafx.scene.paint.Color;
 
 public class PushScreenSpaceTransform implements PushFilter<Pair<Face, Color>> {
-    private PipelineData pd;
+    private Mat4 viewportTransform;
     private PushPipe<Pair<Face, Color>> successor;
 
-    public PushScreenSpaceTransform(PipelineData pd) {
-        this.pd = pd;
+    public PushScreenSpaceTransform(Mat4 viewportTransform) {
+        this.viewportTransform = viewportTransform;
     }
 
     @Override
     public void write(Pair<Face, Color> input) {
-        Mat4 viewportTransform = pd.getViewportTransform();
-
         Face face = input.fst();
 
         //Jede Komponente des Vektors durch W dividieren
@@ -29,7 +26,7 @@ public class PushScreenSpaceTransform implements PushFilter<Pair<Face, Color>> {
 
         float dividedV2X = face.getV2().getX() / face.getV2().getW();
         float dividedV2Y = face.getV2().getY() / face.getV2().getW();
-        float dividedV2Z = input.fst().getV2().getZ() / input.fst().getV2().getW();
+        float dividedV2Z = face.getV2().getZ() / face.getV2().getW();
 
         float dividedV3X = face.getV3().getX() / face.getV3().getW();
         float dividedV3Y = face.getV3().getY() / face.getV3().getW();

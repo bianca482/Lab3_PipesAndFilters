@@ -20,15 +20,15 @@ public class PullPipelineFactory {
         PullPipe<Face> modelViewPipe = new GenericPullPipe<>(pullModelSource);
 
         // 2. Backface culling in VIEW SPACE
-        PullBackfaceCulling pullBackfaceCulling = new PullBackfaceCulling(pd);
+        PullBackfaceCulling pullBackfaceCulling = new PullBackfaceCulling(pd.getViewingCenter(), pd.getViewingEye());
         PullPipe<Face> cullingPipe = new GenericPullPipe<>(pullModelViewTransformation);
 
-        // TODO 3. Depth sorting in VIEW SPACE
-        PullDepthSorting pullDepthSorting = new PullDepthSorting(pd);
+        // 3. Depth sorting in VIEW SPACE
+        PullDepthSorting pullDepthSorting = new PullDepthSorting(pd.getViewingEye());
         PullPipe<Face> depthSortingPipe = new GenericPullPipe<>(pullBackfaceCulling);
 
         // 4. Add coloring (space unimportant)
-        PullColoring pullColoring = new PullColoring(pd);
+        PullColoring pullColoring = new PullColoring(pd.getModelColor());
         PullPipe<Face> colorPipe = new GenericPullPipe<>(pullDepthSorting);
 
         PullPerspectiveProjection pullPerspectiveProjection;
@@ -37,31 +37,30 @@ public class PullPipelineFactory {
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             // 4a. Perform lighting in VIEW SPACE
-            PullFlatShading pullFlatShading = new PullFlatShading(pd);
+            PullFlatShading pullFlatShading = new PullFlatShading(pd.getLightPos());
             PullPipe<Pair<Face, Color>> flatShadingPipe = new GenericPullPipe<>(pullColoring);
 
             pullFlatShading.setPredecessor(flatShadingPipe);
 
             // 5. Perform projection transformation on VIEW SPACE coordinates
-            pullPerspectiveProjection = new PullPerspectiveProjection(pd);
+            pullPerspectiveProjection = new PullPerspectiveProjection(pd.getProjTransform());
             perspectiveProjectionPipe = new GenericPullPipe<>(pullFlatShading);
 
             pullPerspectiveProjection.setPredecessor(perspectiveProjectionPipe);
         } else {
             // 5. Perform projection transformation
-            pullPerspectiveProjection = new PullPerspectiveProjection(pd);
+            pullPerspectiveProjection = new PullPerspectiveProjection(pd.getProjTransform());
             perspectiveProjectionPipe = new GenericPullPipe<>(pullColoring);
 
             pullPerspectiveProjection.setPredecessor(perspectiveProjectionPipe);
-
         }
 
         // 6. Perform perspective division to screen coordinates
-        PullScreenSpaceTransform pullScreenSpaceTransform = new PullScreenSpaceTransform(pd);
+        PullScreenSpaceTransform pullScreenSpaceTransform = new PullScreenSpaceTransform(pd.getViewportTransform());
         PullPipe<Pair<Face, Color>> screenPipe = new GenericPullPipe<>(pullPerspectiveProjection);
 
         // 7. Feed into the sink (renderer)
-        PullModelSink pullModelSink = new PullModelSink(pd, pd.getGraphicsContext());
+        PullModelSink pullModelSink = new PullModelSink(pd.getRenderingMode(), pd.getGraphicsContext());
         PullPipe<Pair<Face, Color>> sinkPullPipe = new GenericPullPipe<>(pullScreenSpaceTransform);
 
         pullModelViewTransformation.setPredecessor(modelViewPipe);
@@ -84,7 +83,7 @@ public class PullPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
                 // Wenn Rendering aufgerufen wird, Faces für modelSource updaten
-                pullModelSource.UpdateData(model.getFaces());
+                pullModelSource.updateData(model.getFaces());
 
                 // Compute rotation in radians
                 float rotationRadiant = pullModelViewTransformation.getRotation() + rotationRadiantPerSecond * fraction;
@@ -92,14 +91,6 @@ public class PullPipelineFactory {
 
                 // Trigger rendering of the pipeline
                 pullModelSink.read();
-
-                // TODO create new model rotation matrix using pd.getModelRotAxis and Matrices.rotate
-
-                // TODO compute updated model-view tranformation
-
-                // TODO update model-view filter
-
-
             }
         };
     }

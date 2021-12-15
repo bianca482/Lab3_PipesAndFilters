@@ -1,24 +1,21 @@
 package at.fhv.sysarch.lab3.pipeline.push.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import javafx.scene.paint.Color;
 
 public class PushColoring implements PushFilter<Face> {
 
-    private final PipelineData pd;
+    private final Color modelColor;
     private PushPipe<Pair<Face, Color>> successor;
 
-    public PushColoring(PipelineData pd) {
-        this.pd = pd;
+    public PushColoring(Color modelColor) {
+        this.modelColor = modelColor;
     }
 
     @Override
     public void write(Face input) {
-        Color modelColor = pd.getModelColor();
-
         float r, g, b;
         r = (float) modelColor.getRed();
         g = (float) modelColor.getGreen();
