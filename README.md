@@ -4,8 +4,10 @@
 Github Repository verfügbar unter: https://github.com/bianca482/Lab3_PipesAndFilters
 
 In der Klasse Main wurde die Größe der Applikation (VIEW_WITH + VIEW_HEIGHT) leicht abgeändert.
-Zum Wechseln zwischen der Push- und Pull-Pipeline muss der Wert von USE_PUSH_PIPELINE abgeändert werden.
 
+Beim Starten aus der IDE muss zum Wechseln zwischen der Push- und Pull-Pipeline muss der Wert von USE_PUSH_PIPELINE abgeändert werden.
+
+Ansonsten wurden auch zwei jar-Files erstellt, welche mit java -jar [pushPipeline.jar][pullPipeline.jar] gestartet werden können.
 
 ## Architektur
 - Architektur erklären (von Push & Pull Pipeline) ->
