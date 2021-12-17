@@ -3,6 +3,7 @@
 ## Allgemeines
 Github Repository verfügbar unter: https://github.com/bianca482/Lab3_PipesAndFilters
 
+Zum Starten der Applikation wird Java Version 11 benötigt.
 In der Klasse Main wurde die Größe der Applikation (VIEW_WITH + VIEW_HEIGHT) leicht abgeändert.
 
 Beim Starten aus der IDE muss zum Wechseln zwischen der Push- und Pull-Pipeline muss der Wert von USE_PUSH_PIPELINE abgeändert werden.
