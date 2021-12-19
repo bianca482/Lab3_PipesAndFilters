@@ -43,4 +43,4 @@ von welcher die Pipe der Input erhält (Filter-Vorgänger). Ein Filter pullt nun
 Pipe, welche wiederrum von seinem vorgehenden Filter die Daten pullt und dem aufrufenden Filter zurückgibt. 
 
 Das Resultat des Renderings der Pull Pipeline sieht folgendermaßen aus:
-<img src="resources/pictures/PullPipeline.png" alt="Pull Pipeline" />
+<img src="resources/pictures/PullPipeline_left.png" alt="Pull Pipeline" />
