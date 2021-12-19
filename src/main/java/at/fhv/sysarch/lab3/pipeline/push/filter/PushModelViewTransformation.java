@@ -1,10 +1,8 @@
 package at.fhv.sysarch.lab3.pipeline.push.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import com.hackoeur.jglm.Mat4;
-import com.hackoeur.jglm.Matrices;
 import com.hackoeur.jglm.Vec4;
 
 import java.util.LinkedList;
@@ -12,22 +10,11 @@ import java.util.List;
 
 public class PushModelViewTransformation implements PushFilter<List<Face>> {
 
-    private final PipelineData pd;
     private PushPipe<List<Face>> successor;
-    private float rotation;
-
-    public PushModelViewTransformation(PipelineData pd) {
-        this.pd = pd;
-    }
+    private Mat4 viewTransform;
 
     @Override
     public void write(List<Face> input) {
-        //Rotations-Matrix
-        Mat4 rotation = Matrices.rotate(this.rotation, pd.getModelRotAxis());
-
-        //Model-View Transformation
-        Mat4 translation = pd.getModelTranslation().multiply(rotation);
-        Mat4 viewTransform = pd.getViewTransform().multiply(translation);
 
         List<Face> faces = new LinkedList<>();
 
@@ -47,12 +34,8 @@ public class PushModelViewTransformation implements PushFilter<List<Face>> {
         successor.write(faces);
     }
 
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
-    }
-
-    public float getRotation() {
-        return rotation;
+    public void setViewTransform(Mat4 viewTransform) {
+        this.viewTransform = viewTransform;
     }
 
     public void setSuccessor(PushPipe<List<Face>> successor){

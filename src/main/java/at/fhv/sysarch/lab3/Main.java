@@ -28,8 +28,8 @@ public class Main extends Application {
     private final static int SCENE_WIDTH = VIEW_WIDTH * 2;
     private final static int SCENE_HEIGHT = VIEW_HEIGHT * 2;
 
-    private final static boolean USE_PUSH_PIPELINE = false;
-    // private final static boolean USE_PUSH_PIPELINE = true;
+    //private final static boolean USE_PUSH_PIPELINE = false;
+    private final static boolean USE_PUSH_PIPELINE = true;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -52,7 +52,7 @@ public class Main extends Application {
 
         root.getChildren().add(grid);
         stage.setScene(s);
-        stage.setTitle("Simple CG Pipeline");
+        stage.setTitle("Simple CG Pipeline (" + (USE_PUSH_PIPELINE?"Push":"Pull")  +")"  );
         stage.show();
 
         om.ifPresent(m -> {

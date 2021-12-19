@@ -6,6 +6,8 @@ import at.fhv.sysarch.lab3.obj.Model;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.push.filter.*;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.*;
+import com.hackoeur.jglm.Mat4;
+import com.hackoeur.jglm.Matrices;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
@@ -17,7 +19,7 @@ public class PushPipelineFactory {
         PushModelSource source = new PushModelSource();
 
         // 1. Perform model-view transformation from model to VIEW SPACE coordinates
-        PushModelViewTransformation pushModelViewTransformation = new PushModelViewTransformation(pd);
+        PushModelViewTransformation pushModelViewTransformation = new PushModelViewTransformation();
         PushPipe<List<Face>> modelPushPipe = new GenericPushPipe<>(pushModelViewTransformation);
 
         // 2. Backface culling in VIEW SPACE
@@ -76,6 +78,7 @@ public class PushPipelineFactory {
         return new AnimationRenderer(pd) {
             // Rotation variable
             private float rotationRadiantPerSecond = 1f;
+            private float currentRotation = 0;
 
             /** This method is called for every frame from the JavaFX Animation
              * system (using an AnimationTimer, see AnimationRenderer). 
@@ -85,8 +88,13 @@ public class PushPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
                 // Compute rotation in radians
-                float rotationRadiant = pushModelViewTransformation.getRotation() + rotationRadiantPerSecond * fraction;
-                pushModelViewTransformation.setRotation(rotationRadiant);
+                currentRotation = currentRotation + rotationRadiantPerSecond * fraction;
+                //Rotations-Matrix
+                Mat4 rotation = Matrices.rotate(currentRotation, pd.getModelRotAxis());
+                //Model-View Transformation
+                Mat4 translation = pd.getModelTranslation().multiply(rotation);
+                Mat4 viewTransform = pd.getViewTransform().multiply(translation);
+                pushModelViewTransformation.setViewTransform(viewTransform);
 
                 // Trigger rendering of the pipeline
                 source.write(model.getFaces());

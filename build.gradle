@@ -28,3 +28,9 @@ application {
     // Define the main class for the application.
     mainClassName = 'at.fhv.sysarch.lab3.Main'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'at.fhv.sysarch.lab3.Main'
+    }
+}

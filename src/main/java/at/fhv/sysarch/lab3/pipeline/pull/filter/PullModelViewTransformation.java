@@ -1,21 +1,14 @@
 package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Mat4;
-import com.hackoeur.jglm.Matrices;
 import com.hackoeur.jglm.Vec4;
 
 public class PullModelViewTransformation implements PullFilter<Face> {
 
-    private final PipelineData pd;
     private PullPipe<Face> predecessor;
-    private float rotation;
-
-    public PullModelViewTransformation(PipelineData pd) {
-        this.pd = pd;
-    }
+    private Mat4 viewTransform;
 
     @Override
     public Face read() {
@@ -24,13 +17,6 @@ public class PullModelViewTransformation implements PullFilter<Face> {
         if (face == null) {
             return null;
         }
-
-        //Rotations-Matrix
-        Mat4 rotation = Matrices.rotate(this.rotation, pd.getModelRotAxis());
-
-        //Model-View Transformation
-        Mat4 translation = pd.getModelTranslation().multiply(rotation);
-        Mat4 viewTransform = pd.getViewTransform().multiply(translation);
 
         Vec4 v1Trans = viewTransform.multiply(face.getV1());
         Vec4 v2Trans = viewTransform.multiply(face.getV2());
@@ -44,12 +30,8 @@ public class PullModelViewTransformation implements PullFilter<Face> {
         return new Face(v1Trans, v2Trans, v3Trans, n1Trans, n2Trans, n3Trans);
     }
 
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
-    }
-
-    public float getRotation() {
-        return rotation;
+    public void setViewTransform(Mat4 viewTransform) {
+        this.viewTransform = viewTransform;
     }
 
     public void setPredecessor(PullPipe<Face> predecessor) {

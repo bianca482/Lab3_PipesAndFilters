@@ -8,7 +8,9 @@ In der Klasse Main wurde die Größe der Applikation (VIEW_WITH + VIEW_HEIGHT) l
 
 Beim Starten aus der IDE muss zum Wechseln zwischen der Push- und Pull-Pipeline muss der Wert von USE_PUSH_PIPELINE abgeändert werden.
 
-Ansonsten wurden auch zwei jar-Files erstellt, welche mit java -jar [pushPipeline.jar][pullPipeline.jar] gestartet werden können.
+Ansonsten wurden auch zwei jar-Files erstellt, welche mittels Kommandozeile wie folgt gestartet werden können:
+1. Wechsel in Verzeichnis in dem sich das Jar-File befindet: *pushd <directory>*
+2. Programm starten: *java -p  "<java_fx_path>" --add-modules javafx.controls,javafx.fxml -jar pushPipeline.jar|pullPipeline.jar* (wobei <java_fx_path> mit dem JAVA FX-Installationspfad des eigenen PCs angepasst werden muss.)
 
 ## Architektur
 - Architektur erklären (von Push & Pull Pipeline) ->
@@ -16,10 +18,6 @@ Ansonsten wurden auch zwei jar-Files erstellt, welche mit java -jar [pushPipelin
     - welche Interfaces,
     - Verschachtelung (müssen Nachfolger oder Vorgänger angegeben werden müssen) (erledigt)
 - Screenshot beider Pipelines (erledigt)
-- Erstellung Rotationsmatrix bei uns in ModelView Filter, nicht in render() von PipelineFactory
-
-
-Bei beiden Pipelines wurde die Rotationsmatrix im ersten Filter (ModelViewTransformation) erstellt.
 
 ### Push Pipeline
 Bei der Push Pipeline pusht die ModelSource zunächst alle Faces auf die nachfolgende Pipe, welche
@@ -33,7 +31,9 @@ nachfolgende Pipe pushed.
 
 Das schlussendliche Ergebnis sieht folgendermaßen aus:
 
-<img src="resources/pictures/PushPipeline.png" alt="Push Pipeline" />
+<img src="resources/pictures/PushPipeline_left.png" alt="Push Pipeline" />
+
+Weitere Bilder zum Vergleich der Push- und Pull Pipeline sind unter Lab3_PipesAndFilters\resources\pictures ersichtlich.
 
 ### Pull Pipeline
 Im Fall der Pull Pipeline ist die ModelSink das einzige aktive Element. Diese triggert durch

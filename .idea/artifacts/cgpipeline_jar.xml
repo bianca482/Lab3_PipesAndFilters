@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="cgpipeline.jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/cgpipeline_jar</output-path>
+    <root id="archive" name="cgpipeline.jar.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="cgpipeline.main" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Dokumente/FHV/Semester 4/Objektorientierte Analyse und Design/Project/Project/caches/modules-2/files-2.1/org.openjfx/javafx-graphics/11/9345c7ea43dbcc73a62eca5332717b4ce617e6c6/javafx-graphics-11-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Dokumente/FHV/Semester 4/Objektorientierte Analyse und Design/Project/Project/caches/modules-2/files-2.1/org.openjfx/javafx-controls/11/af8d24de44e16a19ae959028eb23a48c145fb682/javafx-controls-11-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Dokumente/FHV/Semester 4/Objektorientierte Analyse und Design/Project/Project/caches/modules-2/files-2.1/org.openjfx/javafx-graphics/11/a736dd079047ec0b72b8c4970842a5c5e0c19f2f/javafx-graphics-11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Dokumente/FHV/Semester 4/Objektorientierte Analyse und Design/Project/Project/caches/modules-2/files-2.1/org.openjfx/javafx-base/11/9fcd3e8e3227ec97bf503f7991fad1f3b14d005/javafx-base-11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Dokumente/FHV/Semester 4/Objektorientierte Analyse und Design/Project/Project/caches/modules-2/files-2.1/org.openjfx/javafx-base/11/ad3a4acfaa28b484d30c40c1f009445cc3f6e68b/javafx-base-11-win.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/resources" />
+    </root>
+  </artifact>
+</component>
