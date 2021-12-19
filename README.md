@@ -13,11 +13,6 @@ Ansonsten wurden auch zwei jar-Files erstellt, welche mittels Kommandozeile wie 
 2. Programm starten: *java -p  "<java_fx_path>" --add-modules javafx.controls,javafx.fxml -jar pushPipeline.jar|pullPipeline.jar* (wobei <java_fx_path> mit dem JAVA FX-Installationspfad des eigenen PCs angepasst werden muss.)
 
 ## Architektur
-- Architektur erklären (von Push & Pull Pipeline) ->
-    - Funktionsweise, (erledigt)
-    - welche Interfaces,
-    - Verschachtelung (müssen Nachfolger oder Vorgänger angegeben werden müssen) (erledigt)
-- Screenshot beider Pipelines (erledigt)
 
 ### Push Pipeline
 Bei der Push Pipeline pusht die ModelSource zunächst alle Faces auf die nachfolgende Pipe, welche
