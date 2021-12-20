@@ -2,11 +2,11 @@ package at.fhv.sysarch.lab3.pipeline.push.pipe;
 
 import at.fhv.sysarch.lab3.pipeline.push.filter.PushFilter;
 
-public class GenericPushPipe<T> implements PushPipe<T> {
+public class GenericPushPipe<T, W> implements PushPipe<T> {
 
-    private PushFilter<T> output;
+    private PushFilter<T, W> output;
 
-    public GenericPushPipe(PushFilter<T> output) {
+    public GenericPushPipe(PushFilter<T, W> output) {
         this.output = output;
     }
 

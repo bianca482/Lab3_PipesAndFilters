@@ -2,15 +2,16 @@ package at.fhv.sysarch.lab3.pipeline.push.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
+import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import com.hackoeur.jglm.Vec2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class PushModelSink implements PushFilter<Pair<Face, Color>> {
+public class PushModelSink implements PushFilter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private final GraphicsContext context;
-    private RenderingMode renderingMode;
+    private final RenderingMode renderingMode;
 
     public PushModelSink(RenderingMode renderingMode, GraphicsContext context) {
         this.context = context;
@@ -42,5 +43,10 @@ public class PushModelSink implements PushFilter<Pair<Face, Color>> {
             context.setStroke(faceColorPair.snd());
             context.strokePolygon(new double[]{v1Trans.getX(), v2Trans.getX(), v3Trans.getX()}, new double[]{v1Trans.getY(), v2Trans.getY(), v3Trans.getY()}, 3);
         }
+    }
+
+    @Override
+    public void setSuccessor(PushPipe<Pair<Face, Color>> successor) {
+
     }
 }

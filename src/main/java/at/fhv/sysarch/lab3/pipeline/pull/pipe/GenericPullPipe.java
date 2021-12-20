@@ -2,11 +2,11 @@ package at.fhv.sysarch.lab3.pipeline.pull.pipe;
 
 import at.fhv.sysarch.lab3.pipeline.pull.filter.PullFilter;
 
-public class GenericPullPipe<T> implements PullPipe<T> {
+public class GenericPullPipe<T, W> implements PullPipe<T> {
 
-    private PullFilter<T> input;
+    private PullFilter<T, W> input;
 
-    public GenericPullPipe(PullFilter<T> input) {
+    public GenericPullPipe(PullFilter<T, W> input) {
         this.input = input;
     }
 

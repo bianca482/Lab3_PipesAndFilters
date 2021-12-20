@@ -16,7 +16,7 @@ This has the effect that we render the faces back-to-front, which results in fac
 You need a single z value of each face, for sorting purposes, therefore compute the average of all z values of a face which gives a good result compared to its computational effort (other options are min/max or simply picking a fixed vertex).
  */
 
-public class PushDepthSorting implements PushFilter<List<Face>> {
+public class PushDepthSorting implements PushFilter<List<Face>, Face> {
 
     private PushPipe<Face> successor;
     private final Vec3 viewingEye;
@@ -60,7 +60,8 @@ public class PushDepthSorting implements PushFilter<List<Face>> {
         }
     }
 
-    public void setSuccessor (PushPipe< Face > successor) {
+    @Override
+    public void setSuccessor (PushPipe<Face> successor) {
         this.successor = successor;
     }
 }

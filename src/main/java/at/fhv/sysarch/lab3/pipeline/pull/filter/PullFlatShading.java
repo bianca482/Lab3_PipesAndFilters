@@ -17,7 +17,7 @@ which you can obtain from PipelineData.getLightPos.
 With this normal you compute the dot product between the face normal.
  */
 
-public class PullFlatShading implements PullFilter<Pair<Face, Color>> {
+public class PullFlatShading implements PullFilter<Pair<Face, Color>, Pair<Face, Color>> {
     private final Vec3 lightPos;
     private PullPipe<Pair<Face, Color>> predecessor;
 
@@ -55,6 +55,7 @@ public class PullFlatShading implements PullFilter<Pair<Face, Color>> {
         return new Pair<>(input, color);
     }
 
+    @Override
     public void setPredecessor(PullPipe<Pair<Face, Color>> predecessor) {
         this.predecessor = predecessor;
     }

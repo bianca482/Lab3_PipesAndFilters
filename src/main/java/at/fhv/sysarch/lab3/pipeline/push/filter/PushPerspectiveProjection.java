@@ -7,7 +7,7 @@ import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Vec4;
 import javafx.scene.paint.Color;
 
-public class PushPerspectiveProjection implements PushFilter<Pair<Face, Color>> {
+public class PushPerspectiveProjection implements PushFilter<Pair<Face, Color>, Pair<Face, Color>> {
     private final Mat4 projTransform;
     private PushPipe<Pair<Face, Color>> successor;
 
@@ -28,6 +28,7 @@ public class PushPerspectiveProjection implements PushFilter<Pair<Face, Color>> 
         successor.write(newInput);
     }
 
+    @Override
     public void setSuccessor(PushPipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }

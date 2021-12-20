@@ -1,10 +1,11 @@
 package at.fhv.sysarch.lab3.pipeline.pull.filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 
 import java.util.List;
 
-public class PullModelSource implements PullFilter<Face> {
+public class PullModelSource implements PullFilter<Face, Face> {
 
     private List<Face> data;
     private int idx = -1;
@@ -25,5 +26,10 @@ public class PullModelSource implements PullFilter<Face> {
     public void updateData(List<Face> data) {
         this.data = data;
         idx = -1;
+    }
+
+    @Override
+    public void setPredecessor(PullPipe<Face> predecessor) {
+
     }
 }

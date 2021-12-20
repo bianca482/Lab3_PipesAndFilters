@@ -7,7 +7,7 @@ import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Vec4;
 import javafx.scene.paint.Color;
 
-public class PullPerspectiveProjection implements PullFilter<Pair<Face, Color>> {
+public class PullPerspectiveProjection implements PullFilter<Pair<Face, Color>, Pair<Face, Color>> {
 
     private final Mat4 projTransform;
     private PullPipe<Pair<Face, Color>> predecessor;
@@ -33,6 +33,7 @@ public class PullPerspectiveProjection implements PullFilter<Pair<Face, Color>> 
         return new Pair<>(new Face(v1Trans, v2Trans, v3Trans, face.getN1(), face.getN2(), face.getN3()), input.snd());
     }
 
+    @Override
     public void setPredecessor(PullPipe<Pair<Face, Color>> predecessor) {
         this.predecessor = predecessor;
     }

@@ -7,7 +7,7 @@ import com.hackoeur.jglm.Vec3;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PushBackfaceCulling implements PushFilter<List<Face>> {
+public class PushBackfaceCulling implements PushFilter<List<Face>, List<Face>> {
 
     private PushPipe<List<Face>> successor;
     private final Vec3 viewingDirVector;
@@ -36,6 +36,7 @@ public class PushBackfaceCulling implements PushFilter<List<Face>> {
         successor.write(faces);
     }
 
+    @Override
     public void setSuccessor(PushPipe<List<Face>> successor) {
         this.successor = successor;
     }

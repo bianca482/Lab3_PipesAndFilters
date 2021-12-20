@@ -5,7 +5,7 @@ import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.push.pipe.PushPipe;
 import javafx.scene.paint.Color;
 
-public class PushColoring implements PushFilter<Face> {
+public class PushColoring implements PushFilter<Face, Pair<Face, Color>> {
 
     private final Color modelColor;
     private PushPipe<Pair<Face, Color>> successor;
@@ -28,6 +28,7 @@ public class PushColoring implements PushFilter<Face> {
         successor.write(faceColorPair);
     }
 
+    @Override
     public void setSuccessor(PushPipe<Pair<Face, Color>> successor) {
         this.successor = successor;
     }

@@ -4,7 +4,7 @@ import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Vec3;
 
-public class PullBackfaceCulling implements PullFilter<Face> {
+public class PullBackfaceCulling implements PullFilter<Face, Face> {
 
     private PullPipe<Face> predecessor;
     private final Vec3 viewingDirVector;
@@ -33,6 +33,7 @@ public class PullBackfaceCulling implements PullFilter<Face> {
         return null;
     }
 
+    @Override
     public void setPredecessor(PullPipe<Face> predecessor) {
         this.predecessor = predecessor;
     }

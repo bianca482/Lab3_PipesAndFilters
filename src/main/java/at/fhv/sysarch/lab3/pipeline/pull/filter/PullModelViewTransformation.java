@@ -5,7 +5,7 @@ import at.fhv.sysarch.lab3.pipeline.pull.pipe.PullPipe;
 import com.hackoeur.jglm.Mat4;
 import com.hackoeur.jglm.Vec4;
 
-public class PullModelViewTransformation implements PullFilter<Face> {
+public class PullModelViewTransformation implements PullFilter<Face, Face> {
 
     private PullPipe<Face> predecessor;
     private Mat4 viewTransform;
@@ -34,6 +34,7 @@ public class PullModelViewTransformation implements PullFilter<Face> {
         this.viewTransform = viewTransform;
     }
 
+    @Override
     public void setPredecessor(PullPipe<Face> predecessor) {
         this.predecessor = predecessor;
     }

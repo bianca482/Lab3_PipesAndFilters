@@ -63,7 +63,7 @@ public class PushPipelineFactory {
         PushPipe<Pair<Face, Color>> screenSpacePushPipe = new GenericPushPipe<>(pushScreenSpaceTransform);
 
         // Feed into the sink (renderer)
-        PushFilter<Pair<Face, Color>> sink = new PushModelSink(pd.getRenderingMode(), pd.getGraphicsContext());
+        PushModelSink sink = new PushModelSink(pd.getRenderingMode(), pd.getGraphicsContext());
         PushPipe<Pair<Face, Color>> sinkPushPipe = new GenericPushPipe<>(sink);
 
         source.setSuccessor(modelPushPipe);

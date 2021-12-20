@@ -8,7 +8,7 @@ import com.hackoeur.jglm.Vec4;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PushModelViewTransformation implements PushFilter<List<Face>> {
+public class PushModelViewTransformation implements PushFilter<List<Face>, List<Face>> {
 
     private PushPipe<List<Face>> successor;
     private Mat4 viewTransform;
@@ -38,6 +38,7 @@ public class PushModelViewTransformation implements PushFilter<List<Face>> {
         this.viewTransform = viewTransform;
     }
 
+    @Override
     public void setSuccessor(PushPipe<List<Face>> successor){
         this.successor = successor;
     }
