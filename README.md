@@ -9,7 +9,7 @@ In der Klasse Main wurde die Größe der Applikation (VIEW_WITH + VIEW_HEIGHT) l
 Beim Starten aus der IDE muss zum Wechseln zwischen der Push- und Pull-Pipeline muss der Wert von USE_PUSH_PIPELINE abgeändert werden.
 
 Ansonsten wurden auch zwei jar-Files erstellt, welche mittels Kommandozeile wie folgt gestartet werden können:
-1. Wechsel in Verzeichnis in dem sich das Jar-File und die Objectfiles befinden
+1. Wechsel in Verzeichnis in dem sich das Jar-File und die Objectfiles des resources-Ordners befinden
 2. Programm starten: *java -p  "<java_fx_path>" --add-modules javafx.controls,javafx.fxml -jar pushPipeline.jar|pullPipeline.jar* (wobei <java_fx_path> mit dem JAVA FX-Installationspfad des eigenen PCs angepasst werden muss.)
 
 ## Architektur
@@ -39,8 +39,6 @@ Das schlussendliche Ergebnis sieht folgendermaßen aus:
 
 <img src="resources/pictures/PushPipeline_left.png" alt="Push Pipeline" />
 
-Weitere Bilder zum Vergleich der Push- und Pull Pipeline sind unter Lab3_PipesAndFilters\resources\pictures ersichtlich.
-
 ### Pull Pipeline
 Der Aufbau der PullPipeline bezüglich der *Pipes* ist derselbe wie bei der Push Pipeline, mit dem Unterschied, dass
 hierbei eine read statt der write Methode zur Verfügung gestellt wird.
@@ -62,3 +60,5 @@ Pipe, welche wiederrum von seinem vorgehenden Filter die Daten pullt und dem auf
 Das Resultat des Renderings der Pull Pipeline sieht folgendermaßen aus:
 
 <img src="resources/pictures/PullPipeline_left.png" alt="Pull Pipeline" />
+
+Weitere Bilder zum Vergleich der Push- und Pull Pipeline sind unter Lab3_PipesAndFilters\resources\pictures ersichtlich.
