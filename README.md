@@ -1,5 +1,8 @@
 # Systemarchitekturen Lab 3 (Pipes and Filters)
 
+ToDo: Aufbau Filter (interface etc), Wie werden die Pipes und Filters verknüpft?
+
+
 ## Allgemeines
 Github Repository verfügbar unter: https://github.com/bianca482/Lab3_PipesAndFilters
 
@@ -15,6 +18,10 @@ Ansonsten wurden auch zwei jar-Files erstellt, welche mittels Kommandozeile wie 
 ## Architektur
 
 ### Push Pipeline
+Die Push Pipeline verwendet eine generische PushPipe, welche wiederrum das PushPipe Interface implementiert.
+Dieses Interface hat nur eine Methode, nämlich write. Diese Methode verwendet den Datentyp T, damit beliebige
+Datentypen verwendet werden können. Die generische Pipe wurde zudem implementiert, um beliebige Filter mit einer Pipe verbinden zu können.
+
 Bei der Push Pipeline pusht die ModelSource zunächst alle Faces auf die nachfolgende Pipe, welche
 wiederrum dem nachfolgenden Filter die Daten weitergibt. Es wurde hierbei gleich eine Liste aller
 Faces übergeben, damit später das Depth Sorting leichter umgesetzt werden kann. Nach dem Depth
@@ -31,6 +38,9 @@ Das schlussendliche Ergebnis sieht folgendermaßen aus:
 Weitere Bilder zum Vergleich der Push- und Pull Pipeline sind unter Lab3_PipesAndFilters\resources\pictures ersichtlich.
 
 ### Pull Pipeline
+Der Aufbau der PullPipeline bezüglich der Pipes ist derselbe wie bei der Push Pipeline, mit dem Unterschied, dass
+hierbei eine read statt der write Methode zur Verfügung gestellt wird.
+
 Im Fall der Pull Pipeline ist die ModelSink das einzige aktive Element. Diese triggert durch
 das Pullen der vorgehenenden Pipe den ganzen Prozess. 
 Die Filter haben nun alle einen Pipe-Vorgänger und in einer Pipe wird der Filter gespeichert, 
