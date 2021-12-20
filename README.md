@@ -1,8 +1,5 @@
 # Systemarchitekturen Lab 3 (Pipes and Filters)
 
-ToDo: Aufbau Filter (interface etc), Wie werden die Pipes und Filters verknüpft?
-
-
 ## Allgemeines
 Github Repository verfügbar unter: https://github.com/bianca482/Lab3_PipesAndFilters
 
@@ -18,14 +15,14 @@ Ansonsten wurden auch zwei jar-Files erstellt, welche mittels Kommandozeile wie 
 ## Architektur
 
 ### Push Pipeline
-Die Push Pipeline verwendet eine generische PushPipe, welche wiederrum das PushPipe Interface implementiert.
+Die PushPipeline verwendet eine *generische PushPipe*, welche wiederrum das *PushPipe Interface* implementiert.
 Dieses Interface hat nur eine Methode, nämlich write. Diese Methode verwendet den Datentyp T, damit beliebige
 Datentypen verwendet werden können. Die generische Pipe wurde zudem implementiert, um beliebige Filter mit einer Pipe verbinden zu können.
-Hierbei wurde für die Filter ein Interface implementiert, bei welchem es jeweils einen generischen Input- und Output Typ gibt.
+Hierbei wurde für die *Filter* ein Interface implementiert, bei welchem es jeweils einen generischen Input- und Output Typ gibt.
 Das Interface hat zwei Methoden - die write und die setSuccessor Methode.
 Die write-Methode verwendet den Datentyp T als Input und wird verwendet um dem Input zu verarbeiten und diesen an den Nachfolger weiterzugeben. Der Nachfolger wird mit der setSuccessor-Methode gesetzt, welcher den Datentyp W als Output verwendet.
 
-Die Verknüpfung zwischen den Pipes und Filtern erfolgt in der PushPipelineFactory.
+Die *Verknüpfung zwischen den Pipes und Filtern* erfolgt in der PushPipelineFactory.
 Beim Erstellen einer Pipe wird der nachfolgende Filter im Konstruktor gesetzt.
 Beim jeweiligen Filter muss die Nachfolger Pipe über die setSuccessor-Methode gesetzt werden.
 
@@ -45,14 +42,14 @@ Das schlussendliche Ergebnis sieht folgendermaßen aus:
 Weitere Bilder zum Vergleich der Push- und Pull Pipeline sind unter Lab3_PipesAndFilters\resources\pictures ersichtlich.
 
 ### Pull Pipeline
-Der Aufbau der PullPipeline bezüglich der Pipes ist derselbe wie bei der Push Pipeline, mit dem Unterschied, dass
+Der Aufbau der PullPipeline bezüglich der *Pipes* ist derselbe wie bei der Push Pipeline, mit dem Unterschied, dass
 hierbei eine read statt der write Methode zur Verfügung gestellt wird.
 
-Hierbei wurde für die Filter ein Interface implementiert, bei welchem es jeweils einen generischen Input- und Output Typ gibt.
+Hierbei wurde für die *Filter* ein Interface implementiert, bei welchem es jeweils einen generischen Input- und Output Typ gibt.
 Das Interface hat zwei Methoden - die read und die setPredecessor Methode.
 Die read-Methode verwendet den predecessor um den Input vom Datentyp W zu lesen, verarbeitet die Daten und gibt diese mit den Datentyp T zurück. 
 
-Die Verknüpfung zwischen den Pipes und Filtern erfolgt in der PullPipelineFactory.
+Die *Verknüpfung* zwischen den Pipes und Filtern erfolgt in der PullPipelineFactory.
 Beim Erstellen einer Pipe wird der vorherige Filter im Konstruktor gesetzt.
 Beim jeweiligen Filter muss die Vorgänger Pipe über die setPredecessor-Methode gesetzt werden.
 
@@ -63,4 +60,5 @@ von welcher die Pipe der Input erhält (Filter-Vorgänger). Ein Filter pullt nun
 Pipe, welche wiederrum von seinem vorgehenden Filter die Daten pullt und dem aufrufenden Filter zurückgibt. 
 
 Das Resultat des Renderings der Pull Pipeline sieht folgendermaßen aus:
+
 <img src="resources/pictures/PullPipeline_left.png" alt="Pull Pipeline" />
