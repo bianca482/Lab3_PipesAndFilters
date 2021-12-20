@@ -9,7 +9,7 @@ In der Klasse Main wurde die Größe der Applikation (VIEW_WITH + VIEW_HEIGHT) l
 Beim Starten aus der IDE muss zum Wechseln zwischen der Push- und Pull-Pipeline muss der Wert von USE_PUSH_PIPELINE abgeändert werden.
 
 Ansonsten wurden auch zwei jar-Files erstellt, welche mittels Kommandozeile wie folgt gestartet werden können:
-1. Wechsel in Verzeichnis in dem sich das Jar-File befindet: *pushd <directory>*
+1. Wechsel in Verzeichnis in dem sich das Jar-File befindet
 2. Programm starten: *java -p  "<java_fx_path>" --add-modules javafx.controls,javafx.fxml -jar pushPipeline.jar|pullPipeline.jar* (wobei <java_fx_path> mit dem JAVA FX-Installationspfad des eigenen PCs angepasst werden muss.)
 
 ## Architektur
